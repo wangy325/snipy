@@ -135,10 +135,21 @@ __fargtag(remainder='final result is ' )
 '''
 lambda表达式是一种简洁的方式来定义匿名函数. 
 
-lambda表达式可以在需要函数对象的任何地方使用, 并且通常用于简单的函数功能. 
+lambda表达式可以在需要函数对象的任何地方使用, 并且通常用于简单的函数功能.
+
+sort方法支持对paris列表的元组数据排序, 它的关键字参数key由一个Lambda表达式提供. 
+
+Lambda的内涵是: 按照参数p(可以推导出元组)的索引为1的元素排序. 
+
+已知索引为1的元素是字符串, 所以即按照字符串的字母表顺序排序. 
+
+故排序后的paries是
+
+[(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
+ 
 '''
 paris = [(1, 'one'), (2, 'two'), (3,'three'), (4, 'four')]
-paris.sort(key=lambda pair: pair[1])
+paris.sort(key=lambda p: p[1])
 print(paris)
 
 
