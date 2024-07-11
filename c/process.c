@@ -25,13 +25,11 @@
    * 使用 perror() 函数打印错误信息。
 */
 int main(){
-
     // 返回0 则子进程创建成功
     int pid = fork();
 
-    if (/* condition */pid == 0)
+    if (pid == 0)
     {
-        /* code */
         printf("child's PID is %d. \n", getpid());
     } else if (pid > 0) {
         wait(NULL);
@@ -41,6 +39,5 @@ int main(){
         perror("fork() failed");
         exit(1);
     }
-    exit(0);
-    
+    exit(0); 
 }
