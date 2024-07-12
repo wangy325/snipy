@@ -19,7 +19,8 @@ public class StaticBlock {
  }
 
  public static void main(String[] args) {
- 	StaticBlock t = new StaticBlock(); // 调用一次构造器 x=4
+ 	@SuppressWarnings("unused")
+	StaticBlock t = new StaticBlock(); // 调用一次构造器 x=4
 	System.out.println("---------");
  	t =  new StaticBlock(); // 调用第二次构造器 x=5
 
