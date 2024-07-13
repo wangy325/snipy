@@ -1,79 +1,14 @@
 '''
-python的基本数据结构
-
-- 序列
-    1. 字符串 str
-    2. 列表 list (列表推导式)
-    3. 元组 tuple
-- 集合 set
-- 字典 dict
-- 其他的编程技巧
+和字符串一样, 列表支持索引访问. 
+列表是一个元素可重复, 可修改的序列. 
+列表的元素可以包括不同的类型, 甚至是None 但是, 一般也不要那么做. 
 '''
-
-def __str():
-    '''
-    字符串不可变(immutable)
-    '''
-    print('who are you')
-    # using \ to eacape.
-    print('I\'m robot')
-    # if u don't want to escape a str, like file path, use 'r' before quote.
-    print(r'C:\file\path')
-    # dispite the + calculation,
-    # python also support * calculation, cool
-    print('holy sh' + 7 * 'i' + 't!')
-
-    # TypeError
-    # str = 'python'
-    # str[0] = 'P'
-
-
-__str()
-
-
-def __str_index_and_slice():
-    '''
-    在python中, 字符串是一种序列, 除了基本的操作之外, 还有序列的一些操作. 
-    比如索引范访问, 切片等等.
-    
-    索引会越界, 但是切片不会. 不过不要去在切片里故意越界, 那样不好玩. 
-    
-    The index coule be understand like:
-    
-    +---+---+---+---+---+---+
-    | p | y | t | h | o | n |
-    +---+---+---+---+---+---+
-    0   1   2   3   4   5   6
-    -6 -5  -4  -3  -2  -1
-    '''
-    # index access, index could be negtive
-    s = 'py' 'thon'
-    print(s[0])  # p
-    print(s[5])  # n
-    print(s[-4])  # t
-    print(s[0] == s[-0])  # True
-
-    # Slice 切片
-    print(s[2:4])  # th
-    print(s[2:])  # thon
-    print(s[:5])  # pytho
-    print(s[-3:])  # hon
-    print(s[:-3])  #pyt
-    print(s[-2:] == s[4:])  # True
-    print(s[:-2] == s[:4])  # True
-    print((s[:1] + s[1:]) == s)  # True
-
-
-__str_index_and_slice()
 
 
 def __list():
-    '''
-    列表是一个元素可重复, 可修改的序列. 
-    列表的元素可以包括不同的类型, 甚至是None 但是, 一般也不要那么做. 
-    '''
     alist = [1, 1, 2, 3, 5, 8, 13, 21, 34]
     print(type(alist))
+    print(alist[4])
     # Join 2 lists together
     blist = alist + [54, 89]
     print(blist)
@@ -177,9 +112,79 @@ class ListQueue:
     def print_queue(self):
         print(self.elements)
 
-queue = ListQueue(1,3,5)
+
+queue = ListQueue(1, 3, 5)
 queue.print_queue()
 queue.push(7)
 print(queue.size())
 queue.pull()
 queue.print_queue()
+
+################################
+# 列表推导式, 让创建列表的方式更加简单
+# 格式: 表达式 + for {[for...][if...]}
+# 解释: 一个表达式，后面为一个 for 子句，
+#      然后，是零个或多个 for 或 if 子句。
+#      结果是由表达式依据 for 和 if 子句
+#      求值计算而得出一个新列表。
+################################
+
+# 以下初始化列表的方式
+squares = []
+for x in range(10):
+    squares.append(x**2)
+print(squares)
+### 等价于
+squares = list(map(lambda x: x**2, range(10)))
+### 还可以更加简单的表示成列表推导式
+squares = [x**2 for x in range(10)]
+### 还可以使用更加复杂的表达式
+sqlist = [(x, y) for x in (1, 2, 3) for y in (3, 1, 4) if x != y]
+print(sqlist)
+### 上面的表达式等价于
+sqlist = []
+for x in [4, 6, 9]:
+    for y in [5, 4, 6]:
+        if x != y:
+            sqlist.append((x, y))
+print(sqlist)
+### 利用表达式展开复杂的列表
+vec = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+flat_vec = [e for l in vec for e in l]
+print(flat_vec)
+### 等价于
+vecc = []
+for i in vec:
+    for j in i:
+        vecc.append(j)
+print(vecc)
+### 前置表达式可以是更加复杂的表达式
+from math import pi
+pil = [str(round(pi, i)) for i in range(6)]
+print(pil)
+### 甚至, 是另一个列表推导式. 不过这种语句, 少用, 可读性太差
+matrix = [
+    [1, 2, 3, 4],
+    [5, 6, 7, 8],
+    [9, 10, 11, 12],
+]
+mat = [[i[k] for i in matrix] for k in range(4)]
+print(mat)
+### 等价于
+matt = []   
+for i in range(4):
+    tmp = []
+    for j in range(len(matrix)):
+        tmp.append(matrix[j][i])
+    # for ele in matrix:
+        # tmp.append(ele[i])
+    matt.append(tmp)
+print(matt)
+### 可以使用内置函数zip替代
+print(list(zip(*matrix)))
+
+### del 语句 可以用来删除列表的元素, 或者整个变量
+del[matt[0]]
+print(matt)
+del matt
+print(matt)    # name 'matt' is not defined
