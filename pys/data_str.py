@@ -66,3 +66,25 @@ def __str_index_and_slice():
 
 
 __str_index_and_slice()
+'''
+元组是不可变序列, 不支持修改元素值
+支持序列的一般操作(索引取值, 切片, in/not in等等).
+元组的元素可重复, 可为空
+一般使用'(x, y, z)'来定义元组, 但'()'并不是必须的. 定义元组必须的其实是',' 
+'''
+t = 1, 'amg', None, 'amg'
+print(t)
+### 可嵌套
+u = 'mpower', t
+print(u)
+### 定义空元组时, () 是必须的
+emptyt = ()
+### 定义单元素的元组时, ','是必须的
+singleton = 'hello',
+v = 1, '2', [3, 4]
+print(v)    # (1, '2', [3, 4])
+### 不可修改
+# v[0] = 10   # TypeError: 'tuple' object does not support item assignment
+### "可修改" 和Java的final关键字语义差不多, 对象的引用不可变. 
+v[2][1] = 9
+print(v)    # (1, '2', [3, 9])
