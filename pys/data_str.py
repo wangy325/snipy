@@ -82,9 +82,61 @@ emptyt = ()
 ### 定义单元素的元组时, ','是必须的
 singleton = 'hello',
 v = 1, '2', [3, 4]
-print(v)    # (1, '2', [3, 4])
+print(v)  # (1, '2', [3, 4])
 ### 不可修改
 # v[0] = 10   # TypeError: 'tuple' object does not support item assignment
-### "可修改" 和Java的final关键字语义差不多, 对象的引用不可变. 
+### "可修改" 和Java的final关键字语义类似, 对象的引用不可变.
 v[2][1] = 9
-print(v)    # (1, '2', [3, 9])
+print(v)  # (1, '2', [3, 9])
+'''
+集合 set 是由不可重复的元素组成的无序[容器].
+集合不能包含None. 
+集合不是序列, 不支持序列的操作!
+集合支持合(并)集, 交集, 差集 对称差分等[数学运算](https://zh.wikipedia.org/wiki/%E9%9B%86%E5%90%88%E4%BB%A3%E6%95%B0)
+
+创建空集合只能用set()方法, 不能用{}, 因为{}用来创建空字典.
+'''
+barket = {"apple", 'orange', 'apple', 'pear', 'banaba', None}
+print(barket)  # {'pear', 'orange', 'apple', 'banaba'}
+print('apple' in barket)  # True
+w = set('abracadabra')
+x = set('alacazam')
+print(w)
+print(x)
+print(w & x)  # 交集
+print(w | x)  # 并集
+print(w - x)  # 差集
+print(x - w)  # 差集
+print(w ^ x)  # 对称差集
+### 集合也支持推导式
+y = {x for x in 'abrhjschioqk' if x not in 'abc'}
+print(y)
+'''
+字典 dict . 即k-v键值对.
+字典的键可以是任何不可变类型: 数字, 字符串, 只包含字符串, 数字, 元组的元组和 None
+和集合一样, 字典可以通过 dict() 方法和 {}来创建
+关于字典的其他方法可以参见[API](https://docs.python.org/zh-cn/3/library/stdtypes.html#mapping-types-dict)
+'''
+tel = {"jack": 1100, "rose": 1234}
+print(tel["jack"])  # 1100
+### 删除键值对
+del tel['rose']
+print(tel)
+### 添加键值对
+tel['rose'] = 5201
+### 使用list获取所有的键
+print(list(tel))
+### 使用构造器
+# 可迭代对象作为实参,可迭代对象中的每一项本身必须
+# 为一个刚好包含两个元素的可迭代对象.
+# 每一项中的第一个对象将成为新字典的一个键,
+# 第二个对象将成为其对应的值.
+### None 可以作为键
+z = dict(((1, 'tommy'), (2, 'high'), (3, 'lander'), (None, 'nb')))
+print(z)
+# 还有其他的构造器(不使用位置参数)
+k = dict(b='apple', t='pc', v='macOS')
+print(k)  # {'b': 'apple', 't': 'pc', 'v': 'macOS'}
+### 还可以使用字典推导式
+j = {x: x**2 for x in range(5)}
+print(j)
