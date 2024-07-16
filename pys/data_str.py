@@ -140,3 +140,11 @@ print(k)  # {'b': 'apple', 't': 'pc', 'v': 'macOS'}
 ### 还可以使用字典推导式
 j = {x: x**2 for x in range(5)}
 print(j)
+### 遍历字典的方式 类似的方法有 keys() values() 
+### 类似于java的entry
+for key, value in z.items():
+    print(key, value)
+### 还有一个牛逼的函数 zip
+l = dict(zip(['generic', 'track', 'year'],
+             ['classical', 'Requiem in D minor', '1673']))
+print(l)
