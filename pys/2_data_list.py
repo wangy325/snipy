@@ -58,11 +58,11 @@ class ListStack:
     '''
     使用列表模拟栈
     '''
-    elements = []
+    # elements = [] 一般不在此处声明变量, 因为是public的（类变量）
 
     # constructor
     def __init__(self, *args):
-        self.elements = self.elements + list(args)
+        self.elements = list(args) # 此处的变量才是实例变量
 
     def push(self, ele):
         self.elements.append(ele)
@@ -92,10 +92,8 @@ class ListQueue:
     使用list实现队列
     更快的实现方式: from collections import deque
     '''
-    elements = []
-
     def __init__(self, *args):
-        self.elements.extend(list(args))
+        self.elements = list(args)
 
     def push(self, ele):
         self.elements.append(ele)
