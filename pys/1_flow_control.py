@@ -1,3 +1,8 @@
+"""
+Author: wangy325
+Date: 2024-06-28 01:05:28
+Description: 
+"""
 # 用户输入一个数字
 number = int(input("请输入一个数字："))
 
@@ -7,7 +12,7 @@ if number > 0:
 elif number < 0:
     print(f"{number} 是负数")
 else:
-    print(f"{number} 是0️⃣")
+    print(f"{number} 是0")
 
 # 使用 for 循环打印 1 到 5 的数字
 print("使用 for 循环打印 1 到 10 的奇数：")
@@ -23,9 +28,9 @@ while i <= 10:
     i += 1
 print(f"1 到 10 的数字之和为：{sum}")
 
-""" 在 for 循环中，else 子句会在循环成功结束最后一次迭代之后执行。
-在 while 循环中，它会在循环条件变为假值后执行。
-无论哪种循环，如果因为 break 而结束，那么 else 子句就 不会 执行。 """
+""" 在 for 循环中,else 子句会在循环成功结束最后一次迭代之后执行。
+在 while 循环中,它会在循环条件变为假值后执行。
+无论哪种循环,如果因为 break 而结束,那么 else 子句就 不会 执行。 """
 print('计算2-10之间的质数: ')
 for i in range(2, 10):
     for j in range(2, i):

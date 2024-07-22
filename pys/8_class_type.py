@@ -131,7 +131,133 @@ mapp.print_map()
 try:
     print(mapp.__dict)
 except Exception as er:
-    print(er)   # 'Mapping' object has no attribute '__dict'
+    print(er)  # 'Mapping' object has no attribute '__dict'
 # 不过, 还是可以通过 _Class__attribute的方式访问
 print(mapp._Mapping__dict)
 # 方法同理
+
+# ################# #
+#    Python的继承    #
+# ################# #
+
+
+class BaseClass():
+    base_class_attr = 'Base attr'
+
+    def __init__(self, arg: str):
+        print('BaseClass with-args init')
+        self.base_instance_attr = arg
+        self.__base_hidden_attr = arg
+
+    def __hidden_show(self):
+        print(f'base_class_attr: {BaseClass.base_class_attr}\n'
+              f'base_instance_attr: {self.base_instance_attr}\n'
+              f'__base_hidden_attr: {self.__base_hidden_attr}')
+
+    def show(self):
+        self.__hidden_show()
+
+
+class SubClass(BaseClass):
+    pass
+
+
+# 子类可以访问父类的类变量
+print(SubClass.base_class_attr)
+
+# 子类使用调用父类的有参构造器
+# Java是不行的
+subclass = SubClass('sub_class_attr')
+subclass.show()
+
+# ###################### #
+#       对象迭代器         #
+# ###################### #
+'''
+迭代器(iterator)
+只要是实现了 __iter__()和__next__()方法的类,
+都可以实现迭代器的行为.
+
+迭代器什么行为? 可以使用for...in
+比如list, 可以用 for e in [1, 2, 3]
+比如str, for c in 'str'
+比如file, for line in open('file.txt')
+
+在幕后, for 语句会在容器对象上调用 iter()。 
+该函数返回一个定义了 __next__() 方法的迭代器对象,
+此方法将逐一访问容器中的元素。 
+当元素用尽时, __next__() 将引发 StopIteration 
+异常来通知终止 for 循环。 
+你可以使用 next() 内置函数来调用 __next__() 方法
+
+自定义类也是如此, 可以为任何类添加迭代器
+'''
+
+
+class Iter_class():
+
+    def __init__(self, *args) -> None:
+        self.__data = list(args)
+        self.__index = len(self.__data)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.__index == 0:
+            raise StopIteration
+        self.__index = self.__index - 1
+        return self.__data[self.__index]
+
+    # 非必需方法
+    def has_next(self):
+        return self.__index > 0
+
+
+it = Iter_class(1, 2, 3)
+while it.has_next():
+    print(next(it), end=', ')
+for e in it:
+    print(e, end='$ ')
+
+# ############ #
+#   生成器      #
+# ############ #
+'''
+生成器用于快速创建迭代器
+
+它会自动创建__iter__()和__next__()方法
+'''
+
+
+# 以下函数创建了一个生成器
+def reverse(data):
+    for index in range(len(data) - 1, -1, -1):
+        yield data[index]
+
+
+for c in reverse('golf'):
+    print(c, end=',')
+
+# 当然, str本身就支持迭代器, 上述栗子只是为了阐述写法
+# 生成器还可以使用生成器表达式
+# 生成器表达式使用()而不是[], 后者是列表推导式!
+print()
+print(list(i for i in 'golf'))
+print(sum(i * i for i in range(10)))
+vx = [1, 2, 3]
+vy = [6, 7, 8]
+print(list(x * y for x, y in zip(vx, vy)))
+# 生成器表达式比较简单, 一般不用来出来复杂的逻辑
+# 生成器表达式相比等效的列表推导式, 更加节省内存
+l = list(e for e in range(5))
+# 等效于
+l2 = [e for e in range(5)]
+'''
+>>> (i for i in range(3))
+<generator object <genexpr> at 0x10463ba00>
+>>> [i for i in range(3)]
+[0, 1, 2]
+>>> {x:x*x for x in range(1,4,1)}
+{1: 1, 2: 4, 3: 9}
+'''

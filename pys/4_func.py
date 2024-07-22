@@ -92,9 +92,9 @@ print(__quit(2, prompt='quit(y/n)?'))
 
 # 特殊参数
 def __sfunc(*tuple, **dict):
-    '''
+    """
     特殊参数 元组tuple 和字典dict
-    '''
+    """
     print(tuple, end='\n')
     print(dict)
 
@@ -121,15 +121,15 @@ __sfunc(*l, **t)
 
 # 参数使用的标记  / 和 *
 def __fargtag(c=8, /, promt='inmput a integer:', *, remainder='func done'):
-    '''
+    """
     计算c的阶乘
-    
-    `c` before '/' means it's a positinal argument
-    
+
+    `c` before '/' means it's a positional argument
+
     `promot` after '/' means it's a positional or keyword argument
-    
+
     `remainder` after '*' means it's a keyword arguments
-    '''
+    """
     c = int(input(promt))
     r = 1
     while c > 0:
@@ -148,9 +148,9 @@ def __argfunc(len: int, wid: int):
 
 def __cal(f: __argfunc, prompt='this func show a rectangle\'s square'):
     print(prompt)
-    len = input('pls input length of retangle:')
+    length = input('pls input length of retangle:')
     wid = input('pls input width of rectangle:')
-    s = f(int(len), int(wid))
+    s = f(int(length), int(wid))
     print(f'Square is {s}\n')
 
 
@@ -159,7 +159,7 @@ __cal(__argfunc)
 __cal(f=lambda x, y: __argfunc(x, y))
 
 # Lambda表达式
-'''
+"""
 lambda表达式是一种简洁的方式来定义匿名函数. 
 
 lambda表达式可以在需要函数对象的任何地方使用, 并且通常用于简单的函数功能.
@@ -173,8 +173,8 @@ Lambda的内涵是: 按照参数p(可以推导出元组)的索引为1的元素�
 故排序后的paries是
 
 [(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
- 
-'''
+"""
+
 paris = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
 paris.sort(key=lambda p: p[1])
 print(paris)
@@ -184,9 +184,21 @@ print(paris)
 def full_dunc_def(arg: int,
                   arg2: str = 'optional arg',
                   arg3: tuple = (1, 'one')) -> str:
+    """python函数的完整声明
+
+    Args:
+        arg (int): 
+        arg2 (str, optional): Defaults to 'optional arg'.
+        arg3 (tuple, optional): Defaults to (1, 'one').
+
+    Returns:
+        str: 声明为返回str, 但是python不强制返回值必须和声明一致.
+    """
     print(arg2)
     print(arg3, end='\n')
-    return str(arg)
+    # return arg
+    return arg3
 
 
 print(full_dunc_def(1))
+
