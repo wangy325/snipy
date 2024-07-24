@@ -3,7 +3,7 @@ Author: wangy325
 Date: 2024-07-22 00:25:10
 Description: 闭包(closure)与装饰器(注解 decorator)
 """
-
+import datetime
 import time
 from contextlib import contextmanager
 
@@ -17,18 +17,19 @@ from contextlib import contextmanager
 # 以下用闭包解一个一元一次方程 a*x + b = y
 
 
-def func(a, b):
-    def funx(x):
+def liner(a, b):
+    def coordinate(x):
         return a * x + b
 
-    return funx
+    return coordinate
 
 
 # 3x + 4 = ?
-f = func(3, 4)
+f = liner(3, 4)
 # 3 * 2 + 4 = ?
 print(f(2))
-g = (func(3, 4)(x) for x in range(3))
+# 所以闭包就等价于
+g = (liner(3, 4)(x) for x in range(2, 3))
 for e in g:
     print(e)
 
@@ -38,7 +39,7 @@ for e in g:
 '''
 装饰器是python的一种语法糖
 使用@开头, 类似于Java的注解
-装饰器的作用是, 很强
+装饰器的作用, 很强
 可以改变方法的行为, 而不直接修改方法的代码
 可以实现类似AOP的功能
 '''
@@ -53,11 +54,14 @@ for e in g:
 
 
 #  装饰器的基本写法
-def dec(func2):
+def timer(func):
     def wrapper(*args, **kwargs):
-        print('函数开始执行...')
-        rel = func2(*args, **kwargs)
-        print('函数执行结束...')
+        start = time.perf_counter()
+        print(f'函数{func.__name__}开始执行, 开始时间: {start}')
+        rel = func(*args, **kwargs)
+        time.sleep(1)
+        end = time.perf_counter()
+        print(f'函数{func.__name__}执行结束, 运行耗时: {end - start}')
         return rel
 
     return wrapper
@@ -66,33 +70,76 @@ def dec(func2):
 # 可以看到, 装饰器其实使用了闭包
 
 
-@dec
+@timer
 def add(x, y):
     return x + y
 
 
-print(add(1, 3))
+i = add(1, 3)
+
+# 接合上面闭包的概念, 实际上使用装饰器相当于调用闭包:
+# 把函数的运行推迟
+# 而在运行前,后做一些事情
+j = timer(lambda x, y: x + y)(1, 3)
 
 
-def my_timer(func3):
-    def calc(*args, **kwargs):
-        start = time.perf_counter()
-        print('fun start...')
-        rel = func3(*args, **kwargs)
-        end = time.perf_counter()
-        print(f'fun done, taking {end - start} ')
-        return rel
-
-    return calc
+print(f"i:{i}, j:{j}")
 
 
-@my_timer
+# ##
+# 装饰器当然可以传递参数
+# 使用了多层闭包
+# ##
+def log(level):
+    def inner(func):
+        def wrapper(*args, **kwargs):
+            print(f'[{level}]: fun {func.__name__} start...')
+            rel = func(*args, **kwargs)
+            print(f'[{level}]: fun {func.__name__} done... ')
+            return rel
+
+        return wrapper
+
+    return inner
+
+
+@log("INFO")
 def cal(x, y):
-    time.sleep(1)
     return x * y
 
 
-print(cal(3.1415, 6.2735))
+cal(3, 6)
+
+
+#
+# 或者, 更加灵活地处理装饰器的参数
+# 装饰器参数作为装饰器的业务逻辑
+#
+def decorator(profile=False, logger=False):
+    def inner(func):
+        def wrapper(*args, **kwargs):
+            if profile:
+                start_time = time.time()
+            result = func(*args, **kwargs)
+            if profile:
+                end_time = time.time()
+                print(f"{func.__name__} took {end_time - start_time} seconds")
+            if logger:
+                print(f"calling {func.__name__} with args: {args}, kwargs: {kwargs}")
+            return result
+
+        return wrapper
+
+    return inner
+
+
+@decorator(profile=True, logger=True)
+def say_hi():
+    time.sleep(1)
+    print("Hi")
+
+
+say_hi()
 
 
 # ############# #
