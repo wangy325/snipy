@@ -261,3 +261,7 @@ l2 = [e for e in range(5)]
 >>> {x:x*x for x in range(1,4,1)}
 {1: 1, 2: 4, 3: 9}
 '''
+
+# 关于yield表达式 #
+# 在生成器中使用了yield表达式，yield表达式也只在生成器中使用
+# https://docs.python.org/zh-cn/3/reference/expressions.html#yield-expressions

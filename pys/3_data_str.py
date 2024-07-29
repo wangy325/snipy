@@ -39,7 +39,7 @@ def __str_index_and_slice():
     
     索引会越界, 但是切片不会. 不过不要去在切片里故意越界, 那样不好玩. 
     
-    The index coule be understand like:
+    The index could be understand like:
     
     +---+---+---+---+---+---+
     | p | y | t | h | o | n |

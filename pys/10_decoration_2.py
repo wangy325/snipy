@@ -16,10 +16,10 @@ Description: 介绍python内建的装饰器和更多内容
 
 
 class MyClass:
-    __annotations__ = {
-        'name': str,
-        'age': int
-    }
+    """
+         'name': str,
+         'age': int
+    """
 
     def __init__(self, name: str, age: int):
         self._name = name
@@ -156,6 +156,7 @@ def class_dec(func):
     def wrapper(cls):
         cls.new_func = func
         return cls
+
     return wrapper
 
 
