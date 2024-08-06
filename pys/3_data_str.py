@@ -92,7 +92,8 @@ print(v)  # (1, '2', [3, 9])
 集合 set 是由不可重复的元素组成的无序[容器].
 集合不能包含None. 
 集合不是序列, 不支持序列的操作!
-集合支持合(并)集, 交集, 差集 对称差分等[数学运算](https://zh.wikipedia.org/wiki/%E9%9B%86%E5%90%88%E4%BB%A3%E6%95%B0)
+集合支持合(并)集, 交集, 差集 对称差分等数学运算
+https://zh.wikipedia.org/wiki/%E9%9B%86%E5%90%88%E4%BB%A3%E6%95%B0
 
 创建空集合只能用set()方法, 不能用{}, 因为{}用来创建空字典.
 '''
@@ -115,7 +116,8 @@ print(y)
 字典 dict . 即k-v键值对.
 字典的键可以是任何不可变类型: 数字, 字符串, 只包含字符串, 数字, 元组的元组和 None
 和集合一样, 字典可以通过 dict() 方法和 {}来创建
-关于字典的其他方法可以参见[API](https://docs.python.org/zh-cn/3/library/stdtypes.html#mapping-types-dict)
+关于字典的其他方法可以参见[API]
+https://docs.python.org/zh-cn/3/library/stdtypes.html#mapping-types-dict
 '''
 tel = {"jack": 1100, "rose": 1234}
 print(tel["jack"])  # 1100

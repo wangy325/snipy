@@ -1,3 +1,8 @@
+"""
+Author: wangy325
+Date: 2024-08-06 11:01:31
+Description: 
+"""
 from math import pi as pi
 import os
 
@@ -51,8 +56,10 @@ with 关键字的作用类似Java的try..with...resource, 不需要显式地处�
 ### 文本流
 with open('pys/misc/text', '+w', encoding="utf-8") as f:
     f.writelines([
-        '這是一個純文字檔案.\n', 'This is a plain text file.\n'
-                                 'これはただのテキストファイルです.\n', 'Il s\'agit d\'un fichier texte brut.\n',
+        '這是一個純文字檔案.\n', 
+        'This is a plain text file.\n'
+        'これはただのテキストファイルです.\n', 
+        'Il s\'agit d\'un fichier texte brut.\n',
         'Este es un archivo de texto sin formato.\n'
     ])
 fil = open('pys/misc/text')
