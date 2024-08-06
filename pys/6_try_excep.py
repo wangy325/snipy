@@ -41,11 +41,11 @@ except TypeError as e:
     print(f'{e.__class__}: {e} ')
 else:
     print(f'else block: {c}')
-    
-# But, how about a exception occurs in else subsentence?
+
+# But, how about a exception occurs in else sub-sentence?
 # Solution 1: use extra try...exception to handle that.
-# Solution 2: use finally subsentence to reraise exception.
-# Best way is, make sure your else subsentence clean.
+# Solution 2: use finally sub-sentence to re-raise exception.
+# Best way is, make sure your else sub-sentence clean.
 try:
     print('try ok!')
 except SystemError:
@@ -87,7 +87,7 @@ def how_finally_works2():
         for i in reversed(range(-1, 3)):
             if i < 0:
                 break
-            slt.append( 10 / i)
+            slt.append(10 / i)
         # return slt
     except ZeroDivisionError as e:
         print(f'{e.__class__}: {e}')
@@ -97,6 +97,7 @@ def how_finally_works2():
     finally:
         print('finally here.')
 
+
 print(how_finally_works2())
 '''
 1. 如果try子句中存在return语句, 且没有发生异常, 则else子句不再执行.
@@ -104,9 +105,12 @@ print(how_finally_works2())
 '''
 
 print('-----ExceptionGroup-----')
+
+
 def f():
     es = [OSError('error 1'), SystemError('error 2')]
     raise ExceptionGroup('there are problems: ', es)
+
 
 f()
 '''

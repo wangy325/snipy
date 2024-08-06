@@ -13,6 +13,8 @@ from threading import Thread
 from threading import current_thread
 
 
+###
+##
 class MyThread(Thread):
     """
     直接继承Thread类来创建线程

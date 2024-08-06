@@ -1,10 +1,12 @@
 """
 Author: wangy325
 Date: 2024-07-22 16:57:01
-Description: 
+Description: 4个重要的函数
 """
+
+from functools import reduce
+
 # ############### #
-#   4个重要的函数   #
 #   filter()      #
 #   map()         #
 #   reduce()      #
@@ -21,8 +23,8 @@ class filter(object)
  |  is true. If function is None, return the items that are true
 '''
 
-l = [1, 2, 3, 4]
-f = filter(lambda x: x > 2, l)
+l1 = [1, 2, 3, 4]
+f = filter(lambda x: x > 2, l1)
 print(type(f))  # <class 'filter'>
 
 for e in f:
@@ -46,7 +48,7 @@ class map(object)
  |  each of the iterables.  Stops when the shortest iterable is exhausted.
 '''
 m = [2, 3, 4, 5, 6]
-mm = map(lambda x, y: x + y, l, m)
+mm = map(lambda x, y: x + y, l1, m)
 print(type(mm))  # <class 'map'>
 for e in mm:
     print(e, end=", ")
@@ -95,7 +97,6 @@ reduce(...)
     of the iterable in the calculation, and serves as a default when the
     iterable is empty.
 '''
-from functools import reduce
 
-val = reduce(lambda x, y: x + y, ['p','p','l','e'], 'a')
+val = reduce(lambda x, y: x + y, ['p', 'p', 'l', 'e'], 'a')
 print(val)  # apple

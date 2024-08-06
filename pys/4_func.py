@@ -26,10 +26,10 @@ mf(5, 3)
 
 
 def __fib(limit):
-    '''
+    """
     - fibonacci斐波那契数列
     - 形参: limit: 最大数限制
-    '''
+    """
     a, b = 0, 1
     while a < limit:
         print(a, end=' ')
@@ -39,6 +39,7 @@ def __fib(limit):
 
 
 __fib(100)
+# 内置变量 "__doc__", 可以查看文档
 print(__fib.__doc__)
 
 
@@ -55,11 +56,11 @@ print(__fib2(1000))
 
 
 def __quit(retry, prompt='ready to quit? y/n', reminder='Please try again!'):
-    '''
-    形参列表，有多种形式的参数: 
+    """
+    形参列表，有多种形式的参数:
     1. 不带默认值的参数，是必填参数
     2. 带默认值的参数是可选参数
-    '''
+    """
     while True:
         reply = input(prompt)
         if reply in ('y', 'yes', 'yep', 'ye'):
@@ -70,8 +71,9 @@ def __quit(retry, prompt='ready to quit? y/n', reminder='Please try again!'):
         if retry < 0:
             raise ValueError('invalid user response')
         print(reminder)
-    print('\n')
 
+
+print('\n')
 
 # 仅仅使用必填参数
 # print(__quit(2))
@@ -91,46 +93,46 @@ print(__quit(2, prompt='quit(y/n)?'))
 
 
 # 特殊参数
-def __sfunc(*tuple, **dict):
+def __sfunc(*args, **kwargs):
     """
     特殊参数 元组tuple 和字典dict
     """
-    print(tuple, end='\n')
-    print(dict)
+    print(args, end='\n')
+    print(kwargs)
 
 
 __sfunc((1, 2), (3, 4), name='mask', age='53', nation='US')
 
 # 如果实参单独定义，调用函数时需要解包
-l = ('apple', 'orange', 'grape', 'watermelon')
-t = {
+a_list = ('apple', 'orange', 'grape', 'watermelon')
+a_tuple = {
     'title': 'data structure and algorithm analysis',
     'sub-title': 'descripted by Java',
     'publish': 'machine press'
 }
 '''
-这里如果直接使用 `__sfunc(l, m)`程序并不会出错.
+这里如果直接使用 `__sfunc(a_list, a_tuple)`程序并不会出错.
 
 不过请看上一例, 这里的处理是将l和m作为元组的参数处理的. 
 (这意为着, 函数`__sfunc`的形参数是任意可变的)
 
 所以必须要**解包**实参列表, 才能将`l`和`m`分别作为位置参数.
 '''
-__sfunc(*l, **t)
+__sfunc(*a_list, **a_tuple)
 
 
 # 参数使用的标记  / 和 *
-def __fargtag(c=8, /, promt='inmput a integer:', *, remainder='func done'):
+def __fargtag(c=8, /, prompt='input a integer:', *, remainder='func done'):
     """
     计算c的阶乘
 
     `c` before '/' means it's a positional argument
 
-    `promot` after '/' means it's a positional or keyword argument
+    `prompt` after '/' means it's a positional or keyword argument
 
     `remainder` after '*' means it's a keyword arguments
     """
-    c = int(input(promt))
+    c = int(input(prompt))
     r = 1
     while c > 0:
         r = r * c
@@ -142,8 +144,8 @@ def __fargtag(c=8, /, promt='inmput a integer:', *, remainder='func done'):
 __fargtag(remainder='final result is ')
 
 
-def __argfunc(len: int, wid: int):
-    return len * wid
+def __argfunc(leng: int, wid: int):
+    return leng * wid
 
 
 def __cal(f: __argfunc, prompt='this func show a rectangle\'s square'):
@@ -196,9 +198,8 @@ def full_dunc_def(arg: int,
     """
     print(arg2)
     print(arg3, end='\n')
-    # return arg
+    # return 类型和函数声明类型不是强制一致
     return arg3
 
 
 print(full_dunc_def(1))
-

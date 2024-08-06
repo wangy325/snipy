@@ -3,7 +3,6 @@ Author: wangy325
 Date: 2024-07-22 00:25:10
 Description: 闭包(closure)与装饰器(注解 decorator)
 """
-import datetime
 import time
 from contextlib import contextmanager
 
@@ -77,7 +76,7 @@ def add(x, y):
 
 i = add(1, 3)
 
-# 接合上面闭包的概念, 实际上使用装饰器相当于调用闭包:
+# 结合上面闭包的概念, 实际上使用装饰器相当于调用闭包:
 # 把函数的运行推迟
 # 而在运行前,后做一些事情
 j = timer(lambda x, y: x + y)(1, 3)

@@ -96,6 +96,7 @@ print(f'{f == ff}: {type(f)} ≠ {type(ff)}')
 # 通过实例获取的是一个方法引用
 print(ff == MyClass.fun(cls))  # true
 
+
 # 需要说明的是, 通过实例调用的'方法',
 # 都会隐式地将该实例作为参数, 传递给方法
 # 因此, 类的方法总有一个参数: self
@@ -134,6 +135,8 @@ except Exception as er:
     print(er)  # 'Mapping' object has no attribute '__dict'
 # 不过, 还是可以通过 _Class__attribute的方式访问
 print(mapp._Mapping__dict)
+
+
 # 方法同理
 
 # ################# #

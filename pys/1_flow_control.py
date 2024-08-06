@@ -28,13 +28,17 @@ while i <= 10:
     i += 1
 print(f"1 到 10 的数字之和为：{sum}")
 
-""" 在 for 循环中,else 子句会在循环成功结束最后一次迭代之后执行。
+
+# 和Java的差异：循环体中可以使用else子句  #
+""" 
+在 for 循环中,else 子句会在循环成功结束最后一次迭代之后执行。
 在 while 循环中,它会在循环条件变为假值后执行。
-无论哪种循环,如果因为 break 而结束,那么 else 子句就 不会 执行。 """
+无论哪种循环,如果因为 break 而结束,那么 else 子句就 不会 执行。 
+"""
 print('计算2-10之间的质数: ')
 for i in range(2, 10):
     for j in range(2, i):
-        if (i % j == 0):
+        if i % j == 0:
             print(i, 'equals', j, '*', i // j)
             break
     else:
