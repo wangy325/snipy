@@ -1,2 +1,3 @@
-# snipy
-all snippets, mostly pys.
+## snipy
+
+All snippets, mostly pys.
