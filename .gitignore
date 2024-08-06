@@ -6,3 +6,4 @@
 # python local model cache
 __pycache__
 **/bot_copy.jpg
+.venv
