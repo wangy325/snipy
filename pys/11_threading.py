@@ -13,11 +13,12 @@ from threading import Thread
 from threading import current_thread
 
 
-###
-##
+# ############### #
+#     创建线程     #
+# ############### #
 class MyThread(Thread):
     """
-    直接继承Thread类来创建线程
+    直接继承Thread类来创建线程，需要重写run()方法
     """
 
     def run(self):
@@ -41,12 +42,18 @@ def thread_func(name):
     print(f"{name} is running...")
 
 
-# python 模块的main方法
-if __name__ == '__main__':
-    # creat_thread_by_extend()
+def create_thread_by_constructor():
+    """
+    通过构造器创建线程，实际上就是开启新线程运行某个函数
+    """
     for i in range(5):
-        t = Thread(target=thread_func, args=(f"thread-{i + 1}",))
+        t = Thread(target=thread_func, args=(f"c-thread-{i + 1}",))
         t.start()
         t.join()
-
     print(f"{current_thread().name} done...")
+
+
+# python 模块的main方法
+if __name__ == '__main__':
+    creat_thread_by_extend()
+    create_thread_by_constructor()
