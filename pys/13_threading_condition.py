@@ -6,14 +6,13 @@
 """
 再讨论下汽车打蜡-抛光的问题
 """
-import os
 import random
-import signal
 import sys
 import time
 from threading import Thread, current_thread, Condition
 
 buffered = False
+waxed = True
 condition = Condition()
 
 
@@ -21,32 +20,43 @@ def wax_on():
     """
     打蜡
     """
+    global waxed, buffered
     with condition:
-        while not buffered:
-            print(f"{current_thread().name}: waiting for buffering")
-            condition.wait()
-        print(f"{current_thread().name}: waxed on ")
+        while True:
+            if not buffered:
+                # print(f"{current_thread().name}: waiting for buffering")
+                condition.wait()
+            buffered = False
+            waxed = True
+            time.sleep(1)
+            print(f"{current_thread().name}")
+            condition.notify()
 
 
 def buffer_on():
     """
     抛光
     """
-    global buffered
+    global buffered, waxed
     with condition:
-        print(f"{current_thread().name}: buffered")
-        buffered = True
-        condition.notify()
+        while True:
+            if not waxed:
+                # print(f"{current_thread().name}: waiting for waxing")
+                condition.wait()
+            buffered = True
+            waxed = False
+            time.sleep(1)
+            print(f"{current_thread().name}")
+            condition.notify()
 
 
 def car_polish():
-    wax_t = Thread(target=wax_on, args=())
+    wax_t = Thread(target=wax_on, args=(), daemon=True)
     wax_t.start()
-    buffer_t = Thread(target=buffer_on, args=())
+    buffer_t = Thread(target=buffer_on, args=(), daemon=True)
     buffer_t.start()
     wax_t.join()
     buffer_t.join()
-    print(f"{current_thread().name}: car polished")
 
 
 # ########################## #
@@ -114,9 +124,12 @@ def out_queue(q):
 
 
 def in_out_queue_thread(func1, func2):
-    # 粗暴地使用守护线程
-    in_t = [Thread(target=func1, name=f"in_t{i}", args=(queue,), daemon=True) for i in range(1)]
-    out_t = [Thread(target=func2, name=f"ou_t{i}", args=(queue,), daemon=True) for i in range(1)]
+    # 粗暴地使用守护线程,
+    # 方便主线程结束时, 也结束子线程
+    in_t = [Thread(target=func1, name=f"in_t{i}", args=(queue,), daemon=True)
+            for i in range(1)]
+    out_t = [Thread(target=func2, name=f"ou_t{i}", args=(queue,), daemon=True)
+             for i in range(1)]
     for to in in_t:
         to.start()
     for ti in out_t:
@@ -124,9 +137,7 @@ def in_out_queue_thread(func1, func2):
 
 
 if __name__ == '__main__':
-    # car_polish()
-    in_out_queue_thread(in_queue, out_queue)
-
-    time.sleep(10)
-
-    os.kill(current_thread().ident, signal.SIGTERM)
+    car_polish()
+    # in_out_queue_thread(in_queue, out_queue)
+    time.sleep(4)
+    sys.exit(-1)
