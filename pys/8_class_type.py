@@ -144,7 +144,7 @@ print(mapp._Mapping__dict)
 # ################# #
 
 
-class BaseClass():
+class BaseClass:
     base_class_attr = 'Base attr'
 
     def __init__(self, arg: str):

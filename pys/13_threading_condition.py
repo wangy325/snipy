@@ -1,11 +1,12 @@
 # author: wangy
 # date: 2024/8/8
-# description: 条件
+# description: 条件 使用"守护线程"结束线程的运行
 
 
 """
 再讨论下汽车打蜡-抛光的问题
 """
+import datetime
 import random
 import sys
 import time
@@ -29,7 +30,8 @@ def wax_on():
             buffered = False
             waxed = True
             time.sleep(1)
-            print(f"{current_thread().name}")
+            print(f"{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"
+                  f": {current_thread().name}")
             condition.notify()
 
 
@@ -46,7 +48,8 @@ def buffer_on():
             buffered = True
             waxed = False
             time.sleep(1)
-            print(f"{current_thread().name}")
+            print(f"{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"
+                  f": {current_thread().name}")
             condition.notify()
 
 
@@ -55,15 +58,16 @@ def car_polish():
     wax_t.start()
     buffer_t = Thread(target=buffer_on, args=(), daemon=True)
     buffer_t.start()
-    wax_t.join()
-    buffer_t.join()
+    # 这里不要join了, 线程是死循环, join会让线程一直运行
+    # wax_t.join()
+    # buffer_t.join()
 
 
 # ########################## #
 #   利用锁和条件实现一个阻塞队列  #
 # ########################## #
 
-class MyBlockQueue:
+class BlockQueue:
     """
     A FIFO blocking queue implemented by list
     """
@@ -105,8 +109,11 @@ class MyBlockQueue:
     def print_queue(self):
         print(self.__queue)
 
+    def size(self):
+        return self.size
 
-queue = MyBlockQueue(1)  # 容量为1的阻塞队列
+
+queue = BlockQueue(1)  # 容量为1的阻塞队列
 
 
 def in_queue(q):
@@ -139,5 +146,5 @@ def in_out_queue_thread(func1, func2):
 if __name__ == '__main__':
     car_polish()
     # in_out_queue_thread(in_queue, out_queue)
-    time.sleep(4)
+    time.sleep(10)
     sys.exit(-1)
