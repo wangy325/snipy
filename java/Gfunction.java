@@ -18,6 +18,7 @@ public class Gfunction {
 
 }
 
+// 函数式接口 function interface
 interface MFunction <R, T> {
     R apply(T t);
 }
