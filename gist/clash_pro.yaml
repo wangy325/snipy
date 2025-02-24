@@ -38,7 +38,16 @@ proxy-providers:
       enable: true
       url: http://www.gstatic.com/generate_204
       interval: 300
-  ChinaG-free:
+  ChinaG-jp:
+    type: file
+    path: ./proxyset/ChinaG.yaml
+    interval: 3600
+    filter: 'JP|VN'
+    health-check:
+      enable: true
+      url: http://www.gstatic.com/generate_204
+      interval: 300
+  ChinaG-free: # basically useless
     type: file
     path: ./proxyset/ChinaG.yaml
     interval: 3600
@@ -94,7 +103,7 @@ proxy-groups:
     proxies:
       - DIRECT
       - 🐤️台妹爱我
-      - 🐥️自由香港
+      - 🐥️自由亚洲
       - 🥤亚洲咖啡
       - 🇭🇰香港浓调 
       - ♻️故障切换
@@ -105,12 +114,13 @@ proxy-groups:
     interval: 300
     use: 
       - ChinaG-tw
-  - name: 🐥️自由香港
+  - name: 🐥️自由亚洲
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     use:
       - ChinaG-hk
+      - ChinaG-jp
   - name: 🥤亚洲咖啡
     type: url-test # 自动测速并选择节点
     url: http://www.gstatic.com/generate_204
@@ -136,7 +146,7 @@ proxy-groups:
     # url: http://www.gstatic.com/generate_204
     # interval: 300
     use:
-      - ChinaG-free
+      # - ChinaG-free
       - Ikuuu-free
   - name: 🎬️Youtube
     type: select
