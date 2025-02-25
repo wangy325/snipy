@@ -135,8 +135,8 @@ async def main():
     # parser.add_argument("GOOGLE_GEMINI_KEY", help="Google Gemini API key")
     # options = parser.parse_args()
     # print("Arg parse done.")
-    bot_token = '7436966069:AAGIoO4A5vMGvZHlMF6tMKCxVWifd0iyUaQ'
-    google_api_key = 'AIzaSyC-EXVc1aDFlJpRfau83XYjb_kTy1_pWZ8'
+    bot_token = 'your telegram bot token'
+    google_api_key = 'your google api key'
     genai.configure(api_key=google_api_key)
 
     # Init bot
