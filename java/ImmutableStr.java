@@ -49,7 +49,8 @@ class ImmutableStr {
 /*
  * 程序运行警告
 WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by ImmutableStr (file:/Users/wangy325/Library/Application%20Support/Code/User/workspaceStorage/beda7db88318356d36636c206bf316bc/redhat.java/jdt_ws/snippets_5eaf7742/bin/) to field java.lang.String.value
+WARNING: Illegal reflective access by ImmutableStr 
+                    (file:/__/redhat.java/jdt_ws/snippets_5eaf7742/bin/) to field java.lang.String.value
 WARNING: Please consider reporting this to the maintainers of ImmutableStr
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future releas

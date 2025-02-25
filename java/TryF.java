@@ -1,7 +1,7 @@
 /**
  * Author: wangy325
  * Date: 2024-07-17 12:37:27
- * Description: 不要在finally块里写返回语句
+ * Description: 不要在finally块里写返回语句, finally块里的值总是最终的返回值
  **/
 
 class TryF {
