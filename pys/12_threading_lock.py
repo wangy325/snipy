@@ -100,5 +100,5 @@ def withdraw_multi_t(func, m):
 if __name__ == '__main__':
     # incr_with_x_threads(10, incr_n_times, 1000000)
     # incr_with_x_threads(10, safe_incr_n_times, 1000000)
-    # withdraw_multi_t(withdraw_unsafe, 80)
-    withdraw_multi_t(withdraw_safe, 80)
+    withdraw_multi_t(withdraw_unsafe, 80)
+    # withdraw_multi_t(withdraw_safe, 80)
