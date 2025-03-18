@@ -13,7 +13,7 @@ public class Threading {
             t.start();
         }
 
-        System.out.printf("shardInt: %d\n", MyThread.shardInt);
+        System.out.printf("shardInt: %d\n", MyThread.shardInt);  // uncertain output~
     }
 }
 

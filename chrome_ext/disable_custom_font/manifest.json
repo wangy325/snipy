@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Disable Custom Fonts",
+  "version": "1.0",
+  "description": "自动禁止网页正文内容使用自定义字体",
+  "permissions": ["scripting", "activeTab", "storage"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png"
+  }
+}
+
+  
