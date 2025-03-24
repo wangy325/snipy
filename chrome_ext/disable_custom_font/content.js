@@ -11,30 +11,32 @@ const isIconFontPage = () => {
   });
 };
 
+
+
 const style = document.createElement('style');
 if (!isIconFontPage()) {
   // 没有默认字体的网页，强制所有元素使用浏览器默认字体
   style.textContent = `
       * {
-          font-family:  "SourceHanSans SC VF","SourceHanSans HC", "NotoSans SC", "Arial", "Roboto", "inherit" !important; /* 使用浏览器默认字体 */
-          font-display: swap
+          font-family:  inherit !important; /* 使用浏览器默认字体 */
       }
 
-      *[lang^="zh-Hant"], *[lang^="zh-TW"] { 
-        font-weight: 600; 
-     }
   `;
 } else {
   style.textContent = `
     body, p, li, div, span, h1, h2, h3, h4, h5, h6 {
-        font-family: "SourceHanSans SC VF","SourceHanSans HC", "NotoSans SC", "Arial", "Roboto", "inherit" !important; 
+        font-family: 'inherit', 'Google Sans' !important; 
     }
 
-    /* doesn't work for all pages*/
-    div[lang^="zh-Hant"],
-    div[lang^="zh-TW"],
-    p[lang^="zh-Hant"],
-    p[lang^="zh-TW"]{ 
+    /* Note: If page uses traditional chinese, characters seem too thin, that doesn't look nice.
+        So, we need to set font-weight to 600 for traditional chinese pages.
+        But this is not perfect, because it doesn't work for all pages.
+        Cause some pages set font-weight to 400, so this style can not override it.
+    */
+    html[lang^="zh-Hant"], html[lang^="zh-hant"], html[lang^="zh-TW"],
+    div[lang^="zh-Hant"], div[lang^="zh-hant"], div[lang^="zh-TW"],
+    p[lang^="zh-Hant"], p[lang^="zh-hant"], p[lang^="zh-TW"]
+    { 
         font-weight: 600 !important; 
      }
 
@@ -49,6 +51,7 @@ if (!isIconFontPage()) {
     .icon, .material-symbols-outlined { 
       font-family: 'FontAwesome',
          'Glyphicons Halflings',  /* python anywhere*/
+         'Google Symbols',  /* google.com */ 
          'Material Icons',
          'sans-serif',
          'global-iconfont', /* taobao.com*/
