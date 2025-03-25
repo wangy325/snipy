@@ -52,6 +52,7 @@ if (!isIconFontPage()) {
       font-family: 'FontAwesome',
          'Glyphicons Halflings',  /* python anywhere*/
          'Google Symbols',  /* google.com */ 
+         'FabricMDL2Icons', /* onedrive */
          'Material Icons',
          'sans-serif',
          'global-iconfont', /* taobao.com*/
