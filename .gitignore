@@ -2,7 +2,7 @@
 .mvn/
 .idea
 .idea/*
-out/*
+out/
 **/*.out
 target/*
 .vscode

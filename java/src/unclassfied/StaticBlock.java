@@ -1,3 +1,4 @@
+package unclassfied;
 
 /** 静态块只在类加载时调用一次 */
 public class StaticBlock {

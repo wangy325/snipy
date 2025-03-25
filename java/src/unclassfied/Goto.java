@@ -1,3 +1,5 @@
+package unclassfied;
+
 public class Goto {
 
     /**

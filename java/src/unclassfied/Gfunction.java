@@ -1,3 +1,4 @@
+package unclassfied;
 /**
  * 一个抽象方法的栗子.
  * <p>
