@@ -41,7 +41,7 @@ public class MinInt {
         // file path: src/main/resources/resources.txt/test-input.resources.txt
         Scanner in = new Scanner(
             new FileInputStream(
-                new File("resources/txt/test-input.txt")
+                new File("java/resources/txt/test-input.txt")
             )
         );
 
