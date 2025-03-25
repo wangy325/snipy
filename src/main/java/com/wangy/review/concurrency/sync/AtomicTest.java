@@ -1,6 +1,5 @@
 package com.wangy.review.concurrency.sync;
 
-import lombok.val;
 
 import java.util.concurrent.TimeUnit;
 

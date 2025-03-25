@@ -1,7 +1,6 @@
 package com.wangy.review.concurrency.component;
 
 
-import lombok.SneakyThrows;
 
 import java.util.concurrent.*;
 
@@ -41,7 +40,6 @@ public class TestThreadPoolExecutor {
         System.out.println(executor.getQueue().size());
     }
 
-    @SneakyThrows
     void initPoolWithNonEmptyQueue() {
         BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(2) {{
             add(() -> {

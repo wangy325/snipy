@@ -1,6 +1,5 @@
 package com.wangy.algorithm.recursive;
 
-import org.springframework.util.Assert;
 
 import java.util.HashMap;
 
@@ -118,7 +117,7 @@ public class Steps {
     public static void main(String[] args) {
         int n = 6;
         System.out.println(solution(n));
-        Assert.isTrue(solution(n) == solution2(n));
+        System.out.println(solution(n) == solution2(n));
     }
 
 }

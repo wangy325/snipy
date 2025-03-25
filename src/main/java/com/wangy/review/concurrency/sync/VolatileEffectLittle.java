@@ -1,6 +1,5 @@
 package com.wangy.review.concurrency.sync;
 
-import lombok.SneakyThrows;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -72,7 +71,6 @@ public class VolatileEffectLittle {
      * this是SerialNumberChecker对象，而每个线程的都对应一个this！
      */
     class SerialNumberChecker implements Runnable {
-        @SneakyThrows
         @Override
         public void run() {
             while (!shutdown) {

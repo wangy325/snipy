@@ -1,8 +1,6 @@
 package com.wangy.review.concurrency.component;
 
-import lombok.SneakyThrows;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -46,7 +44,6 @@ public class ExecutorShutdown {
     /** 容量为1的线程池，其能保证提交的任务都是序列化执行的 */
     ThreadPoolExecutor service = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
 
-    @SneakyThrows
     public static void main(String[] args) {
         ExecutorShutdown es = new ExecutorShutdown();
 //        es.shutdown();

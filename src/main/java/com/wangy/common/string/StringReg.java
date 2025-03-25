@@ -1,7 +1,5 @@
 package com.wangy.common.string;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,7 +7,7 @@ import java.util.regex.Pattern;
  * @author wangy
  * @date 2021-2-7 13:39
  */
-@Slf4j
+
 public class StringReg {
     static String pattern1 = "ab.cd";
     static String pattern2 = "ab.cd.ef";
@@ -42,9 +40,10 @@ public class StringReg {
     }
 
     public static void main(String[] args) {
-        log.info(pattern12("^([a-z]+\\.)+[a-z]+$"));
-        log.info(replaceFirst("\\w"));
-        log.info(getSuffix("(\\.\\w{3,4})"));
-//        log.info(getSuffix("@(\\S+)"));
+
+        System.out.println((pattern12("^([a-z]+\\.)+[a-z]+$")));
+        System.out.println((replaceFirst("\\w")));
+        System.out.println((getSuffix("(\\.\\w{3,4})")));
+//        System.out.println((getSuffix("@(\\S+)")));
     }
 }

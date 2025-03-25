@@ -1,6 +1,5 @@
 package com.wangy.review.concurrency.component;
 
-import lombok.SneakyThrows;
 
 import java.util.concurrent.*;
 
@@ -73,8 +72,7 @@ public class FutureTaskImpl<V> extends FutureTask<V> {
         }
     }
 
-    @SneakyThrows
-    void cancel() {
+    void cancel() throws InterruptedException {
         ExecutorService pool = Executors.newCachedThreadPool();
         FutureTask<?> future = (FutureTask<?>) pool.submit(this);
         // 防止任务没有被执行就被cancel
@@ -105,8 +103,7 @@ public class FutureTaskImpl<V> extends FutureTask<V> {
      * 对于有返回值的任务，执行{@link #runAndReset()}之后调用{@link FutureTask#get()}
      * 方法获取返回值会造成阻塞
      */
-    @SneakyThrows
-    void runAfterReset() {
+    void runAfterReset() throws ExecutionException, InterruptedException {
         for (; ; ) {
             runAndReset();
             if (runTime > 1) break;
@@ -120,7 +117,7 @@ public class FutureTaskImpl<V> extends FutureTask<V> {
         System.out.println("isDone: " + isDone); // true
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // 构造一个没有返回值的FutureTask
         FutureTaskImpl<?> ft = new FutureTaskImpl<>(new Task(), null);
         ft.cancel();

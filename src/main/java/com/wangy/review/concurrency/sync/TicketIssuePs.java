@@ -1,8 +1,5 @@
 package com.wangy.review.concurrency.sync;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +54,25 @@ public class TicketIssuePs {
         }
     }
 
-    @Setter
-    @Getter
     static class TV {
         Thread t;
         Integer v = 0;
+
+        public Thread getT() {
+            return t;
+        }
+
+        public Integer getV() {
+            return v;
+        }
+
+        public void setT(Thread t) {
+            this.t = t;
+        }
+
+        public void setV(Integer v) {
+            this.v = v;
+        }
     }
 
     static class Purchase implements Callable<TV> {
@@ -76,9 +87,8 @@ public class TicketIssuePs {
             this.tick = tick;
         }
 
-        @SneakyThrows
         @Override
-        public TV call() {
+        public TV call() throws InterruptedException {
             while (true) {
                 TV tv = tl.get();
                 tv.setT(Thread.currentThread());

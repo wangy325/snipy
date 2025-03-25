@@ -1,6 +1,5 @@
 package com.wangy.review.concurrency.component;
 
-import lombok.SneakyThrows;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,8 +33,7 @@ public class TestScheduledPoolExecutor {
         System.out.println(Thread.currentThread() + "c interrupted");
     }
 
-    @SneakyThrows
-    void basicTest() {
+    void basicTest() throws InterruptedException {
 //        service.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         service.schedule(this::s, 2, TimeUnit.SECONDS);
         service.schedule(this::c, 1, TimeUnit.SECONDS);
@@ -46,7 +44,6 @@ public class TestScheduledPoolExecutor {
         System.exit(0);
     }
 
-    @SneakyThrows
     void howManyThreads() {
 
         // 如果使用默认策略取消一个任务，那么非核心线程就不会被销毁
@@ -73,8 +70,7 @@ public class TestScheduledPoolExecutor {
         service.shutdown();
     }
 
-    @SneakyThrows
-    void cancelSchedule() {
+    void cancelSchedule() throws InterruptedException {
         service.setRemoveOnCancelPolicy(true);
         // task to cancelled
         service.schedule(this::s, 10, TimeUnit.SECONDS);
@@ -94,8 +90,7 @@ public class TestScheduledPoolExecutor {
         System.out.println("queue size: " + queue.size());
     }
 
-    @SneakyThrows
-    void shutdownPolicy() {
+    void shutdownPolicy() throws InterruptedException {
         // 如果任务在shutdown()之后仍在delay，那么将值设置为false可以取消任务的执行
         // 其默认值为true
         service.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
@@ -114,8 +109,7 @@ public class TestScheduledPoolExecutor {
         System.out.println(service.isTerminated());
     }
 
-    @SneakyThrows
-    void shutdownNow() {
+    void shutdownNow() throws InterruptedException {
         service.schedule(this::c, 0, TimeUnit.MILLISECONDS);
 
         TimeUnit.MILLISECONDS.sleep(1000);
@@ -123,7 +117,7 @@ public class TestScheduledPoolExecutor {
         service.shutdownNow();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         TestScheduledPoolExecutor ts = new TestScheduledPoolExecutor(0);
 //        ts.basicTest();
 //        ts.howManyThreads();

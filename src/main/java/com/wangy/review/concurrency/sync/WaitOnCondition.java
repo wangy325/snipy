@@ -1,7 +1,5 @@
 package com.wangy.review.concurrency.sync;
 
-import lombok.SneakyThrows;
-import lombok.var;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -48,23 +46,29 @@ public class WaitOnCondition {
 
     class Play implements Runnable {
 
-        @SneakyThrows
         @Override
         public void run() {
             while (true) {
-                playTrack();
-                TimeUnit.MILLISECONDS.sleep(1000);
+                try {
+                    playTrack();
+                    TimeUnit.MILLISECONDS.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
 
     class Record implements Runnable {
-        @SneakyThrows
         @Override
         public void run() {
             while (true) {
                 recordTrack();
-                TimeUnit.MILLISECONDS.sleep(1000);
+                try {
+                    TimeUnit.MILLISECONDS.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

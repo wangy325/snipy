@@ -1,9 +1,6 @@
 package com.wangy.common.util;
 
 import com.google.common.collect.ComparisonChain;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.springframework.util.Assert;
 
 import java.util.Comparator;
 import java.util.function.Function;
@@ -57,13 +54,16 @@ import java.util.function.Function;
 public class CompareChain {
 
 
-    @Data
-    @AllArgsConstructor
     static class Person implements Comparable<Person> {
         String lastname;
         String firstname;
         long zipcode;
 
+        public Person(String lastname, String firstname, long zipcode) {
+            this.lastname = lastname;
+            this.firstname = firstname;
+            this.zipcode = zipcode;
+        }
 
         /**
          * usage : a.compareTo(b)
@@ -86,7 +86,7 @@ public class CompareChain {
                     .result();*/
 
             // The java 8 also offer Functional Interface to do this
-            // But the usage of Function<T,U> is little bit complicated to understand
+            // But the usage of Function<T,U> is a little bit complicated to understand
             return Comparator
                     .comparing((Function<Person, String>) person -> person.lastname)
                     .thenComparing(person -> person.firstname)
@@ -104,8 +104,9 @@ public class CompareChain {
         Person p3 = new Person("steve", "jobs", 530000);
         Person p4 = new Person("steve", "jobs", 520000);
 
-        Assert.isTrue(p1.compareTo(p2) > 0, String.valueOf(p1.compareTo(p2)));
-        Assert.isTrue(p1.compareTo(p3) < 0, String.valueOf(p1.compareTo(p3)));
-        Assert.isTrue(p1.compareTo(p4) == 0, String.valueOf(p1.compareTo(p4)));
+        System.out.printf("p1 compares to p2: %d\n", p1.compareTo(p2));
+        System.out.printf("p1 compares to p3: %d\n", p1.compareTo(p3));
+        System.out.printf("p1 compares to p4: %d\n",p1.compareTo(p4));
+
     }
 }

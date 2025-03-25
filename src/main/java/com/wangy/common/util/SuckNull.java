@@ -1,6 +1,5 @@
 package com.wangy.common.util;
 
-import lombok.EqualsAndHashCode;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,7 +42,7 @@ public class SuckNull {
      * @see java.util.Objects
      */
     static void listOption() {
-        // non null elements in someList
+        // non-null elements in someList
         // usage of Optional in jdk
         System.out.println("NULL elements in someList: " +
                 someList.stream().filter(e -> !Optional.ofNullable(e).isPresent()).count());
@@ -140,7 +139,6 @@ public class SuckNull {
 //        mapOption();
     }
 
-    @EqualsAndHashCode
     static class Key {
         static int seed = new Random(47).nextInt(100);
 
@@ -153,6 +151,16 @@ public class SuckNull {
         @Override
         public String toString() {
             return "Key{" + serial + "}";
+        }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return super.equals(obj);
         }
     }
 

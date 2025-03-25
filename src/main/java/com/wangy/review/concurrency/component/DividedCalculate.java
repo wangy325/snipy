@@ -1,11 +1,7 @@
 package com.wangy.review.concurrency.component;
 
-import lombok.SneakyThrows;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * 多线程分部计算
@@ -36,8 +32,7 @@ public class DividedCalculate {
         }
     }
 
-    @SneakyThrows
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ExecutorService pool = Executors.newCachedThreadPool();
 
         Future<Integer> s3 = pool.submit(new Task(51, 76));

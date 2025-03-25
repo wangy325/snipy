@@ -1,5 +1,7 @@
 package com.wangy.designpattern.structure.decorator;
 
+import java.util.Arrays;
+
 /**
  * @author wangy
  * @version 1.0
@@ -9,7 +11,6 @@ public class BeverageClient {
 
     public static void main(String[] args) {
         HouseBlend hb = new HouseBlend(Size.EXTRA_LARGE);
-
         Milk milk = new Milk(hb);
         Mocha mocha = new Mocha(milk);
         Mocha mocha1 = new Mocha(mocha);

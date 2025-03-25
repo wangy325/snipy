@@ -3,7 +3,6 @@ package com.wangy.review.concurrency.component;
 import com.wangy.common.helper.BasicGenerator;
 import com.wangy.common.helper.Fat;
 import com.wangy.common.helper.Generator;
-import lombok.SneakyThrows;
 
 import java.util.List;
 import java.util.concurrent.*;
@@ -73,8 +72,7 @@ public class ExchangerDemo {
     static int size = 10;
     static int delay = 1; // Seconds
 
-    @SneakyThrows
-    void test() {
+    void test() throws InterruptedException {
         ExecutorService exec = Executors.newCachedThreadPool();
         Exchanger<List<Fat>> xc = new Exchanger<>();
         List<Fat>
@@ -86,7 +84,7 @@ public class ExchangerDemo {
         exec.shutdownNow();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ExchangerDemo ed = new ExchangerDemo();
         ed.test();
     }

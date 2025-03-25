@@ -1,7 +1,5 @@
 package com.wangy.review.concurrency.sync;
 
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,11 +110,25 @@ public class TicketIssue {
         }
     }
 
-    @Setter
-    @Getter
     static class TV {
         Thread t;
         Integer v = 0;
+
+        public void setT(Thread t) {
+            this.t = t;
+        }
+
+        public void setV(Integer v) {
+            this.v = v;
+        }
+
+        public Thread getT() {
+            return t;
+        }
+
+        public Integer getV() {
+            return v;
+        }
     }
 
     static class Purchase implements Callable<TV> {
