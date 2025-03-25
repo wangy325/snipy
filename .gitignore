@@ -1,10 +1,21 @@
 **/*.class
+.mvn/
 .idea
-.vscode
-*.iml
+.idea/*
+out/*
 **/*.out
+target/*
+.vscode
+.venv
+*.iml
 # python local model cache
 __pycache__
 **/bot_copy.jpg
-.venv
 _metadata
+
+# java vm crash log
+hs_err_pid*.log
+*.hprof
+java_pid2583.hprof.7pixr.b.ij
+
+.DS_Store
