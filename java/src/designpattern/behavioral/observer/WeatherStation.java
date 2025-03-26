@@ -54,7 +54,7 @@ public class WeatherStation implements Subject {
        this.humidity = humidity;
        this.pressure = pressure;
        this.status = true;
-       notifyBoard();
+    //    notifyBoard(); // 可以在此处发出通知
    }
 
     public float getTemperature() {

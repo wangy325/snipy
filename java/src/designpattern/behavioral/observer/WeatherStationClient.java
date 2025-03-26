@@ -8,18 +8,16 @@ package designpattern.behavioral.observer;
 public class WeatherStationClient {
     public static void main(String[] args) {
         WeatherStation client = new WeatherStation();
-        NormalBoard normalBoard =  new NormalBoard();
-
+        client.setData(23.2f, 10.91f, 1.01f);
+        NormalBoard normalBoard =  new NormalBoard();        
         client.registerBoard(normalBoard);
-        // client.setData(23.2f, 10.91f, 1.01f);
-
         // register a new listener
         StatisticsBoard statisticsBoard =  new StatisticsBoard();
         client.registerBoard(statisticsBoard);
-        client.setData(23.2f, 10.91f, 1.01f);
-
+        
+        client.notifyBoard();   // 1st notify
         client.unregisterBoard(normalBoard);
         client.setStatus(true);
-        client.notifyBoard();
+        client.notifyBoard();   // 2nd notify
     }
 }
