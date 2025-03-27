@@ -1,6 +1,5 @@
 package algorithm.array;
 
-
 import java.util.Arrays;
 
 /**
@@ -10,7 +9,7 @@ import java.util.Arrays;
  * @version 1.0
  * @date 2021/6/21 / 16:11
  */
-public class Array<E> {
+public class CustomArray<E> {
 
     private E[] data;
     /** 数组空间大小 */
@@ -20,12 +19,11 @@ public class Array<E> {
 
     private static final int DEFAULT_SIZE = 10;
 
-
-    public Array() {
+    public CustomArray() {
         this(DEFAULT_SIZE);
     }
 
-    public Array(int capacity) {
+    public CustomArray(int capacity) {
         data = (E[]) new Object[capacity];
         this.capacity = capacity;
         count = 0;
@@ -53,10 +51,10 @@ public class Array<E> {
     }
 
     /*
-    添加一个元素；
-    删除一个元素；
-    根据index获取元素；
-    判断元素是否在数组中并返回下标；
+     * 添加一个元素；
+     * 删除一个元素；
+     * 根据index获取元素；
+     * 判断元素是否在数组中并返回下标；
      */
 
     E add(E e) {
@@ -72,7 +70,8 @@ public class Array<E> {
             grow();
         }
         if (index > count) {
-            throw new IndexOutOfBoundsException("index must between zero and count.");
+            throw new IndexOutOfBoundsException(
+                    "index must between zero and count.");
         }
         if (index == count) {
             return add(e);
@@ -95,7 +94,7 @@ public class Array<E> {
         int index;
         if ((index = contains(e)) >= 0) {
             remove(index);
-//            --count;
+            // --count;
         }
         return e;
     }
@@ -110,7 +109,9 @@ public class Array<E> {
      */
     E remove(int index) {
         if (index >= count) {
-            throw new IndexOutOfBoundsException("index must between " + 0 + " and " + (count - 1) + ".");
+            throw new IndexOutOfBoundsException(
+                    "index must between 0 and"
+                            + (count - 1) + ".");
         }
         E datum = data[index];
         for (int i = index; i < count - 1; i++) {
@@ -122,7 +123,9 @@ public class Array<E> {
 
     E get(int index) {
         if (index >= count) {
-            throw new IndexOutOfBoundsException("index must between 0 and " + (count - 1) + ".");
+            throw new IndexOutOfBoundsException(
+                    "index must between 0 and "
+                            + (count - 1) + ".");
         }
         return data[index];
     }
@@ -146,26 +149,39 @@ public class Array<E> {
 
     @Override
     public String toString() {
-        return "Array:" + Arrays.toString(data) + ", capacity:" + capacity + ", count:" + count;
+        return String.format(
+                "Array: %s, capacity: %d, count: %d",
+                Arrays.toString(data),
+                capacity,
+                count);
     }
 
     public static void main(String[] args) {
-        Array<Integer> array = new Array<>(2);
+        CustomArray<Integer> array = new CustomArray<>(2);
         array.add(1);
         array.add(2);
         array.add(3);
         array.add(4);
 
         System.out.println("init==> " + array);
-        array.remove(new Integer(1));
+        array.remove(Integer.valueOf(1));   // remove by value
         System.out.println("remove==> " + array);
-        array.add(0,9);
-        System.out.println("add==> "+ array);
+        array.add(0, 9);
+        System.out.println("add==> " + array);
         array.add(2, 8);
-        System.out.println("add==> "+ array);
+        System.out.println("add==> " + array);
         System.out.println("contains 6 ? " + (array.contains(6) != -1));
         System.out.println("contains 3 ? " + (array.contains(3) != -1));
         System.out.println("get by index 2: " + array.get(2));
     }
 
 }
+
+/// :~
+// init==> Array:[1, 2, 3, 4], capacity:4, count:4
+// remove==> Array:[2, 3, 4, null], capacity:4, count:3
+// add==> Array:[9, 2, 3, 4], capacity:4, count:4
+// add==> Array:[9, 2, 8, 3, 4, null], capacity:6, count:5
+// contains 6 ? false
+// contains 3 ? true
+// get by index 2: 8
