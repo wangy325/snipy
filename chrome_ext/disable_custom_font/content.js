@@ -17,14 +17,14 @@ const style = document.createElement('style');
 if (!isIconFontPage()) {
   // 没有默认字体的网页，强制所有元素使用浏览器默认字体
   style.textContent = `
-      * {
+      body, p, li, div, h1, h2, h3, h4, h5, h6 {
           font-family:  inherit !important; /* 使用浏览器默认字体 */
       }
 
   `;
 } else {
   style.textContent = `
-    body, p, li, div, span, h1, h2, h3, h4, h5, h6 {
+    body, p, li, div, h1, h2, h3, h4, h5, h6 {
         font-family: 'inherit', 'Google Sans' !important; 
     }
 
@@ -40,25 +40,22 @@ if (!isIconFontPage()) {
         font-weight: 600 !important; 
      }
 
-    *[class^="fa"],
-    *[class*=" fa"],  /* Font Awesome */
-    *[class^="glyphicon"],
-    *[class*=" glyphicon"], /* Glyphicon */
-    *[class^="material-icons"],
-    *[class*=" material-icons"], /* Material Icons */
-    *[class*="icon"],   /* taobao, ssp*/
-     [class*=" icon-"], [class^=icon-] /* smzdm*/
+    *[class^="fa"],*[class*=" fa"],
+    *[class^="glyphicon"],*[class*=" glyphicon"], 
+    *[class^="material-icons"],*[class*=" material-icons"], 
+    *[class*="icon"],[class*=" icon-"],[class^=icon-],
     .icon, .material-symbols-outlined { 
       font-family: 'FontAwesome',
-         'Glyphicons Halflings',  /* python anywhere*/
-         'Google Symbols',  /* google.com */ 
-         'FabricMDL2Icons', /* onedrive */
+         'Glyphicons Halflings',  
+         'Google Symbols',  
+         'FabricMDL2Icons', 'FabricMDL2Icons-8',
          'Material Icons',
+         'docons', 
          'sans-serif',
-         'global-iconfont', /* taobao.com*/
-         'sspai_community_icon', /* ssp */
-         'zdm-icons', /* smzdm */
-         'iconfont' /* jd */ 
+         'global-iconfont', 
+         'sspai_community_icon', 
+         'zdm-icons', 
+         'iconfont' 
          !important; 
    }
   `;
