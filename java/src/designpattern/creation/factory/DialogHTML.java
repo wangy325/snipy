@@ -7,7 +7,7 @@ package designpattern.creation.factory;
  */
 public class DialogHTML extends Dialog{
     @Override
-    Button createButton() {
-        return new ButtonHTML();
+    Button1 createButton() {
+        return new Button1HTML();
     }
 }

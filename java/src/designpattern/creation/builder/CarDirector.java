@@ -5,7 +5,7 @@ package designpattern.creation.builder;
  * @version 1.0
  * @date 2022/3/13 / 23:00
  */
-public class Director {
+public class CarDirector {
 
     private  Builder builder;
 

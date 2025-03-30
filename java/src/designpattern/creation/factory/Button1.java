@@ -6,7 +6,7 @@ package designpattern.creation.factory;
  * @date 2022/3/12 / 17:26
  * 产品接口
  */
-public interface Button {
+public interface Button1 {
 
     void render();
 

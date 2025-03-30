@@ -7,3 +7,10 @@ package designpattern.creation.builder;
  */
 public interface Engine {
 }
+
+class NormalEngine implements Engine{
+}
+
+class SportEngine implements Engine{
+}
+

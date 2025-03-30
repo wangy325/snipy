@@ -1,4 +1,4 @@
-package designpattern.creation.factory.abstractfactory;
+package designpattern.creation.abstractfactory;
 
 /**
  * @author wangy
@@ -8,7 +8,6 @@ package designpattern.creation.factory.abstractfactory;
  */
 public interface GUIFactory {
 
-    Button createButton();
-
+    Button2 createButton();
     CheckBox createCheckBox();
 }

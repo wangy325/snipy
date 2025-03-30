@@ -8,11 +8,8 @@ package designpattern.behavioral.observer;
 public interface Subject {
 
     void registerBoard(Board board);
-
     void unregisterBoard(Board board);
-
     void notifyBoard();
-
 
     // other businesses
 }

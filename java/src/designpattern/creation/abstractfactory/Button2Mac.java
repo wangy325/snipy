@@ -1,11 +1,11 @@
-package designpattern.creation.factory.abstractfactory;
+package designpattern.creation.abstractfactory;
 
 /**
  * @author wangy
  * @version 1.0
  * @date 2022/3/12 / 18:40
  */
-public class ButtonMac implements Button{
+public class Button2Mac implements Button2 {
     @Override
     public void paint() {
         System.out.println("mac: button click");

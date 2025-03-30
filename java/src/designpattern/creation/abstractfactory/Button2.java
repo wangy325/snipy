@@ -1,4 +1,4 @@
-package designpattern.creation.factory.abstractfactory;
+package designpattern.creation.abstractfactory;
 
 /**
  * @author wangy
@@ -6,7 +6,7 @@ package designpattern.creation.factory.abstractfactory;
  * @date 2022/3/12 / 18:37
  * 产品1
  */
-public interface Button {
+public interface Button2 {
 
     void paint();
 }

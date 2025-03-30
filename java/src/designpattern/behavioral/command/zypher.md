@@ -21,7 +21,7 @@
 classDiagram
 
 class Invoker {
-    +Command command
+    +Command cinemaCommand
     +invoke()
 }
 Invoker *..> Command

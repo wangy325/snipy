@@ -5,16 +5,13 @@ package designpattern.creation.factory;
  * @version 1.0
  * @date 2022/3/12 / 17:35
  */
-public class TestMain {
+public class TestDialog {
 
     public static void main(String[] args) {
         String os = "windows";
         if (args != null && args.length != 0) os = args[0];
-
         Dialog dialog = init(os);
-
         dialog.render();
-
     }
 
     private static Dialog init( String os) {
@@ -28,3 +25,7 @@ public class TestMain {
         return dialog;
     }
 }
+///:~
+//<===== click windows button.
+//<===== render windows button.
+//

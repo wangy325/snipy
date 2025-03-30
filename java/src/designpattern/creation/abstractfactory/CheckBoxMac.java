@@ -1,4 +1,4 @@
-package designpattern.creation.factory.abstractfactory;
+package designpattern.creation.abstractfactory;
 
 /**
  * @author wangy

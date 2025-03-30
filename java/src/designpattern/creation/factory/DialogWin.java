@@ -7,7 +7,7 @@ package designpattern.creation.factory;
  */
 public class DialogWin extends Dialog{
     @Override
-    Button createButton() {
-        return new ButtonWin();
+    Button1 createButton() {
+        return new Button1Win();
     }
 }

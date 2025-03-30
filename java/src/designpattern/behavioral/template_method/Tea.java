@@ -5,7 +5,7 @@ package designpattern.behavioral.template_method;
  * @version 1.0
  * @date 2024/4/2 / 11:15
  */
-public class Tea extends AbstractCaffeineBeverage{
+public class Tea extends AbsCaffeineBeverageWithHook{
     // 茶里面的咖啡因含量是咖啡豆的3倍！
     @Override
     public void raw() {

@@ -9,16 +9,10 @@ import designpattern.behavioral.command.rec.*;
  * @version 1.0
  * @date 2024/3/29 / 11:48
  */
-public class Client {
+public class TestCommand {
     public static void main(String[] args) {
 //        simpleCommand();
         batchCommand();
-    }
-
-    static void simpleCommand(){
-        AcOnCommand acOnCommand = new AcOnCommand(new AirConditioner());
-        RemoteControl remoteControl =  new RemoteControl(acOnCommand);
-        remoteControl.onButtonPress();
     }
 
     static void batchCommand(){
@@ -37,3 +31,20 @@ public class Client {
         remoteControl.redoCommand();
     }
 }
+
+///:~
+//AC on.
+//Popcorn ready.
+//Stereo on.
+//Screen down.
+//DV on
+//Ready to play Schindler's List.
+//Light off.
+//---------------
+//Light on.
+//DV off.
+//Screen off.
+//Stereo off.
+//Popcorn off.
+//AC off.
+//

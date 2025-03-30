@@ -1,6 +1,6 @@
 package designpattern.behavioral.command.cmd;
 
-import designpattern.behavioral.command.Command;
+import designpattern.behavioral.command.CinemaCommand;
 import designpattern.behavioral.command.rec.*;
 
 /**
@@ -9,7 +9,7 @@ import designpattern.behavioral.command.rec.*;
  * @date 2024/3/29 / 11:16
  * 一个宏命令
  */
-public class FamilyCinemaOnCommand implements Command {
+public class FamilyCinemaOnCommand implements CinemaCommand {
 
     private AirConditioner ac;
     private Light light;
@@ -18,7 +18,13 @@ public class FamilyCinemaOnCommand implements Command {
     private Screen screen;
     private Stereo stereo;
 
-    public FamilyCinemaOnCommand(AirConditioner ac, Light light, DV dv, Popcorn popcorn, Screen screen, Stereo stereo) {
+    public FamilyCinemaOnCommand(
+            AirConditioner ac,
+            Light light,
+            DV dv,
+            Popcorn popcorn,
+            Screen screen,
+            Stereo stereo) {
         this.ac = ac;
         this.light = light;
         this.dv = dv;

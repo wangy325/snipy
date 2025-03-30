@@ -7,17 +7,17 @@ package designpattern.behavioral.command;
  */
 public class RemoteControl {
 
-    private Command command;
+    private CinemaCommand cinemaCommand;
 
-    public RemoteControl(Command command) {
-        this.command = command;
+    public RemoteControl(CinemaCommand cinemaCommand) {
+        this.cinemaCommand = cinemaCommand;
     }
 
     public void onButtonPress(){
-        command.execute();
+        cinemaCommand.execute();
     }
 
     public void redoCommand(){
-        command.undo();
+        cinemaCommand.undo();
     }
 }

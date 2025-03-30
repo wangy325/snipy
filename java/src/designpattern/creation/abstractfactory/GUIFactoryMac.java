@@ -1,4 +1,4 @@
-package designpattern.creation.factory.abstractfactory;
+package designpattern.creation.abstractfactory;
 
 /**
  * @author wangy
@@ -7,8 +7,8 @@ package designpattern.creation.factory.abstractfactory;
  */
 public class GUIFactoryMac implements GUIFactory{
     @Override
-    public Button createButton() {
-        return new ButtonMac();
+    public Button2 createButton() {
+        return new Button2Mac();
     }
 
     @Override

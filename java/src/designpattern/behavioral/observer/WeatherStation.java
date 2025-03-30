@@ -21,7 +21,7 @@ public class WeatherStation implements Subject {
 
     @Override
     public void registerBoard(Board board) {
-        if (!boards.contains(board)){
+        if (!boards.contains(board)) {
             boards.add(board);
         }
     }
@@ -33,7 +33,7 @@ public class WeatherStation implements Subject {
 
     @Override
     public void notifyBoard() {
-        if (status){
+        if (status) {
             for (Board board : boards) {
                 board.update(this);
             }
@@ -49,13 +49,15 @@ public class WeatherStation implements Subject {
     private float humidity;
     private float pressure;
 
-   public void setData(float temperature, float humidity, float pressure){
-       this.temperature = temperature;
-       this.humidity = humidity;
-       this.pressure = pressure;
-       this.status = true;
-    //    notifyBoard(); // 可以在此处发出通知
-   }
+    public void setData(float temperature,
+                        float humidity,
+                        float pressure) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        this.status = true;
+        //    notifyBoard(); // 可以在此处发出通知
+    }
 
     public float getTemperature() {
         return temperature;

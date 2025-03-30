@@ -6,7 +6,7 @@ package designpattern.behavioral.command;
  * @date 2024/3/29 / 10:42
  * 命令接口
  */
-public interface Command {
+public interface CinemaCommand {
 
     void execute();
 

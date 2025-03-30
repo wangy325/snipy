@@ -28,12 +28,10 @@ public abstract class AbstractCaffeineBeverage {
     protected final void boilWater() {
         System.out.println("Starting boiling water.");
     }
-
     protected final void pullInCup() {
         System.out.println("Done! pull beverage into cup.");
     }
 
     public abstract void raw();
-
     public abstract void condiment();
 }

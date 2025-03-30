@@ -9,7 +9,7 @@ package designpattern.creation.factory;
 public abstract class Dialog {
 
     /** 工厂方法 button factory */
-    abstract Button createButton();
+    abstract Button1 createButton();
 
     /**
      *  请注意，创建者的主要职责并非是创建产品。其中通常会包含一些核心业务
@@ -17,8 +17,8 @@ public abstract class Dialog {
      *  法并使其返回不同类型的产品来间接修改业务逻辑。
      */
     void render(){
-        Button button = createButton();
-        button.onClick();
-        button.render();
+        Button1 button1 = createButton();
+        button1.onClick();
+        button1.render();
     }
 }

@@ -5,7 +5,7 @@ package designpattern.creation.factory;
  * @version 1.0
  * @date 2022/3/12 / 17:30
  */
-public class ButtonWin implements Button{
+public class Button1Win implements Button1 {
     @Override
     public void render() {
         System.out.println("<===== render windows button.");

@@ -5,7 +5,7 @@ package designpattern.behavioral.template_method;
  * @version 1.0
  * @date 2024/4/2 / 11:46
  */
-public class TestMain {
+public class TestTemplateMethod {
     public static void main(String[] args) {
 //        test();
         testHook();

@@ -5,14 +5,14 @@ package designpattern.creation.factory;
  * @version 1.0
  * @date 2022/3/12 / 17:30
  */
-public class ButtonHTML implements Button{
+public class Button1HTML implements Button1 {
     @Override
     public void render() {
-        System.out.println("=====> render Web Button.");
+        System.out.println("=====> render HTML Button.");
     }
 
     @Override
     public void onClick() {
-        System.out.println("====> click Html button.");
+        System.out.println("====> click HTML button.");
     }
 }
