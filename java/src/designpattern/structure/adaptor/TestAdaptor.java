@@ -7,7 +7,7 @@ import java.util.Enumeration;
  * @version 1.0
  * @date 2024/4/1 / 17:15
  */
-public class TestMain {
+public class TestAdaptor {
     public static void main(String[] args) {
         RoundCircle rc = new RoundCircle();
         SquareCircleAdaptor adaptor = new SquareCircleAdaptor(rc);
