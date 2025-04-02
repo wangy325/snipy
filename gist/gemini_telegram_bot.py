@@ -3,27 +3,32 @@
 import traceback
 import asyncio
 import google.generativeai as genai
-import re
 import telebot
 from telebot import TeleBot
+from telebot import asyncio_helper
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
 from md2tgmd import escape
-
 # proxy
 # https://www.pythonanywhere.com/forums/topic/32151/
-from telebot import asyncio_helper
+# asyncio_helper.proxy = 'http://proxy.server:3128'
 
-asyncio_helper.proxy = 'http://proxy.server:3128'
+# for local debug only
+asyncio_helper.proxy = 'http://127.0.0.1:7890'
+import os
+
+os.environ['http_proxy'] = "http://127.0.0.1:7890"
+os.environ['https_proxy'] = "http://127.0.0.1:7890"
+os.environ['all_proxy'] = "socks5://127.0.0.1:7890"
 
 # global configs
 error_info = "⚠️⚠️⚠️\nSomething went wrong !\nplease try to change your prompt or contact the admin !"
-before_generate_info = "🤖Generating..."
-download_pic_notify = "🤖Loading picture..."
+before_generate_info = "☁️Generating..."
+download_pic_notify = "☁️Loading picture..."
 model_1 = "gemini-2.0-flash"
 model_2 = "gemini-1.5-pro-latest"
 
-n = 30  #Number of historical records to keep
+max_history = 30  #Number of historical records to keep
 
 generation_config = {
     "temperature": 0.7,
@@ -103,20 +108,22 @@ async def gemini(bot, message, m, model_type):
         player_dict[str(message.from_user.id)] = player
     else:
         player = player_dict[str(message.from_user.id)]
-    if len(player.history) > n:
+    if len(player.history) > max_history:
         player.history = player.history[2:]
     try:
         sent_message = await bot.reply_to(message, before_generate_info)
         await send_message(player, m)
         try:
-            await bot.edit_message_text(escape(player.last.text),
-                                        chat_id=sent_message.chat.id,
-                                        message_id=sent_message.message_id,
-                                        parse_mode="MarkdownV2")
+            await split_and_send(bot,
+                                 chat_id=sent_message.chat.id,
+                                 text=player.last.text,
+                                 message_id=sent_message.message_id,
+                                 parse_mode="MarkdownV2")
         except:
-            await bot.edit_message_text(escape(player.last.text),
-                                        chat_id=sent_message.chat.id,
-                                        message_id=sent_message.message_id)
+            await split_and_send(bot,
+                                 chat_id=sent_message.chat.id,
+                                 text=player.last.text,
+                                 message_id=sent_message.message_id)
 
     except Exception:
         traceback.print_exc()
@@ -124,9 +131,58 @@ async def gemini(bot, message, m, model_type):
                                     chat_id=sent_message.chat.id,
                                     message_id=sent_message.message_id)
 
-# telebot 400 error:   message too long
-async def handle_message(text, size=4096):
-    return [text[i:i+size] for i in range(0, len(text), size)]
+
+# tele_bot 400 error:   message too long
+# '你好！很高兴为你服务。有什么我可以帮你的吗？\n'
+async def split_and_send(bot,
+                         chat_id,
+                         text: str,
+                         message_id=None,
+                         parse_mode=None):
+    slice_size = 3072   #默认最长消息长度
+    slice_step = 384 #默认长度内没有换行符时，向后查询的步长
+    segments = []
+    start = 0
+    # print(len(text))
+
+    if len(text) > slice_size:
+        while start < len(text):
+            end = min(start + slice_size, len(text))
+            # (start, end)  ~ 3072
+            # find closest empty line
+            split_point = text.rfind('\n', start, end)
+            # 没找到继续向后查找
+            while split_point == -1 and end < len(text):
+                i_start = end
+                end = min(end + slice_step, len(text))
+                split_point = text.rfind('\n', i_start, end)
+                # print(f"inner: {end} ")
+
+            # print(f"outer: {split_point} ")
+            if split_point - start > slice_size:
+                segment = text[start:split_point + 2]
+                start = split_point + 2
+            elif slice_size > split_point - start > 0:
+                segment = text[start:split_point + 1]
+                start = split_point + 1
+            else:  # split_point = -1
+                segment = text[start:end]
+                break  # Prevent infinite loop if no split point is found
+            segments.append(segment)
+    else:
+        segments.append(text)
+    print(segments)
+    for index, segment in enumerate(segments):
+        if index == 0 and message_id:
+            await bot.edit_message_text(escape(segment),
+                                        chat_id=chat_id,
+                                        message_id=message_id,
+                                        parse_mode=parse_mode)
+        else:
+            await bot.send_message(chat_id,
+                                   escape(segment),
+                                   parse_mode=parse_mode)
+
 
 async def main():
     # Init args
@@ -135,8 +191,9 @@ async def main():
     # parser.add_argument("GOOGLE_GEMINI_KEY", help="Google Gemini API key")
     # options = parser.parse_args()
     # print("Arg parse done.")
-    bot_token = 'your telegram bot token'
-    google_api_key = 'your google api key'
+    
+    bot_token = ''
+    google_api_key = ''
     genai.configure(api_key=google_api_key)
 
     # Init bot
@@ -153,44 +210,69 @@ async def main():
     print("Bot init done.")
 
     # Init commands
-    bot.register_message_handler(start,                 commands=['start'],         pass_bot=True)
-    bot.register_message_handler(gemini_handler,        commands=['gemini'],        pass_bot=True)
-    bot.register_message_handler(gemini_pro_handler,    commands=['gemini_pro'],    pass_bot=True)
-    bot.register_message_handler(clear,                 commands=['clear'],         pass_bot=True)
-    bot.register_message_handler(switch,                commands=['switch'],        pass_bot=True)
-    bot.register_message_handler(gemini_photo_handler,  content_types=["photo"],    pass_bot=True)
+    bot.register_message_handler(start, commands=['start'], pass_bot=True)
+    bot.register_message_handler(gemini_handler,
+                                 commands=['gemini'],
+                                 pass_bot=True)
+    bot.register_message_handler(gemini_pro_handler,
+                                 commands=['gemini_pro'],
+                                 pass_bot=True)
+    bot.register_message_handler(clear, commands=['clear'], pass_bot=True)
+    bot.register_message_handler(switch, commands=['switch'], pass_bot=True)
+    bot.register_message_handler(gemini_photo_handler,
+                                 content_types=["photo"],
+                                 pass_bot=True)
     bot.register_message_handler(
         gemini_private_handler,
         func=lambda message: message.chat.type == "private",
         content_types=['text'],
         pass_bot=True)
-    
+
     # Start bot
     print("Starting Gemini_Telegram_Bot.")
     await bot.polling(none_stop=True)
-    
-    #### 
+
+
+    ####
 async def start(message: Message, bot: TeleBot) -> None:
     try:
-        await bot.reply_to(message , escape("Welcome, you can ask me questions now. \nFor example: `Who is john lennon?`"), parse_mode="MarkdownV2")
+        await bot.reply_to(
+            message,
+            escape(
+                "Welcome, you can ask me questions now. \nFor example: `Who is john lennon?`"
+            ),
+            parse_mode="MarkdownV2")
     except IndexError:
         await bot.reply_to(message, error_info)
+
 
 async def gemini_handler(message: Message, bot: TeleBot) -> None:
     try:
         m = message.text.strip().split(maxsplit=1)[1].strip()
     except IndexError:
-        await bot.reply_to( message , escape("Please add what you want to say after /gemini. \nFor example: `/gemini Who is john lennon?`"), parse_mode="MarkdownV2")
+        await bot.reply_to(
+            message,
+            escape(
+                "Please add what you want to say after /gemini. \nFor example: `/gemini Who is john lennon?`"
+            ),
+            parse_mode="MarkdownV2")
         return
-    await gemini(bot,message,m,model_1)
+    await gemini(bot, message, m, model_1)
+
 
 async def gemini_pro_handler(message: Message, bot: TeleBot) -> None:
     try:
         m = message.text.strip().split(maxsplit=1)[1].strip()
     except IndexError:
-        await bot.reply_to( message , escape("Please add what you want to say after /gemini_pro. \nFor example: `/gemini_pro Who is john lennon?`"), parse_mode="MarkdownV2")
+        await bot.reply_to(
+            message,
+            escape(
+                "Please add what you want to say after /gemini_pro. \nFor example: `/gemini_pro Who is john lennon?`"
+            ),
+            parse_mode="MarkdownV2")
         return
-    await gemini(bot,message,m,model_2)
+    await gemini(bot, message, m, model_2)
+
 
 async def clear(message: Message, bot: TeleBot) -> None:
     # Check if the player is already in gemini_player_dict.
@@ -200,32 +282,35 @@ async def clear(message: Message, bot: TeleBot) -> None:
         del gemini_pro_player_dict[str(message.from_user.id)]
     await bot.reply_to(message, "Your history has been cleared")
 
+
 async def switch(message: Message, bot: TeleBot) -> None:
     if message.chat.type != "private":
-        await bot.reply_to( message , "This command is only for private chat !")
+        await bot.reply_to(message, "This command is only for private chat !")
         return
     # Check if the player is already in default_model_dict.
     if str(message.from_user.id) not in default_model_dict:
         default_model_dict[str(message.from_user.id)] = False
-        await bot.reply_to( message , "Now you are using "+model_2)
+        await bot.reply_to(message, "Now you are using " + model_2)
         return
     if default_model_dict[str(message.from_user.id)] == True:
         default_model_dict[str(message.from_user.id)] = False
-        await bot.reply_to( message , "Now you are using "+model_2)
+        await bot.reply_to(message, "Now you are using " + model_2)
     else:
         default_model_dict[str(message.from_user.id)] = True
-        await bot.reply_to( message , "Now you are using "+model_1)
+        await bot.reply_to(message, "Now you are using " + model_1)
+
 
 async def gemini_private_handler(message: Message, bot: TeleBot) -> None:
     m = message.text.strip()
     if str(message.from_user.id) not in default_model_dict:
         default_model_dict[str(message.from_user.id)] = True
-        await gemini(bot,message,m,model_1)
+        await gemini(bot, message, m, model_1)
     else:
         if default_model_dict[str(message.from_user.id)]:
-            await gemini(bot,message,m,model_1)
+            await gemini(bot, message, m, model_1)
         else:
-            await gemini(bot,message,m,model_2)
+            await gemini(bot, message, m, model_2)
+
 
 async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
     if message.chat.type != "private":
@@ -233,7 +318,8 @@ async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
         if not s or not (s.startswith("/gemini")):
             return
         try:
-            prompt = s.strip().split(maxsplit=1)[1].strip() if len(s.strip().split(maxsplit=1)) > 1 else ""
+            prompt = s.strip().split(maxsplit=1)[1].strip() if len(
+                s.strip().split(maxsplit=1)) > 1 else ""
             file_path = await bot.get_file(message.photo[-1].file_id)
             sent_message = await bot.reply_to(message, download_pic_notify)
             downloaded_file = await bot.download_file(file_path.file_path)
@@ -242,15 +328,26 @@ async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
             await bot.reply_to(message, error_info)
         model = genai.GenerativeModel(model_1)
         contents = {
-            "parts": [{"mime_type": "image/jpeg", "data": downloaded_file}, {"text": prompt}]
+            "parts": [{
+                "mime_type": "image/jpeg",
+                "data": downloaded_file
+            }, {
+                "text": prompt
+            }]
         }
         try:
-            await bot.edit_message_text(before_generate_info, chat_id=sent_message.chat.id, message_id=sent_message.message_id)
+            await bot.edit_message_text(before_generate_info,
+                                        chat_id=sent_message.chat.id,
+                                        message_id=sent_message.message_id)
             response = await async_generate_content(model, contents)
-            await bot.edit_message_text(response.text, chat_id=sent_message.chat.id, message_id=sent_message.message_id)
+            await bot.edit_message_text(response.text,
+                                        chat_id=sent_message.chat.id,
+                                        message_id=sent_message.message_id)
         except Exception:
             traceback.print_exc()
-            await bot.edit_message_text(error_info, chat_id=sent_message.chat.id, message_id=sent_message.message_id)
+            await bot.edit_message_text(error_info,
+                                        chat_id=sent_message.chat.id,
+                                        message_id=sent_message.message_id)
     else:
         s = message.caption if message.caption else ""
         try:
@@ -263,19 +360,27 @@ async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
             await bot.reply_to(message, error_info)
         model = genai.GenerativeModel(model_1)
         contents = {
-            "parts": [{"mime_type": "image/jpeg", "data": downloaded_file}, {"text": prompt}]
+            "parts": [{
+                "mime_type": "image/jpeg",
+                "data": downloaded_file
+            }, {
+                "text": prompt
+            }]
         }
         try:
-            await bot.edit_message_text(before_generate_info, chat_id=sent_message.chat.id, message_id=sent_message.message_id)
+            await bot.edit_message_text(before_generate_info,
+                                        chat_id=sent_message.chat.id,
+                                        message_id=sent_message.message_id)
             response = await async_generate_content(model, contents)
-            await bot.edit_message_text(response.text, chat_id=sent_message.chat.id, message_id=sent_message.message_id)
+            await bot.edit_message_text(response.text,
+                                        chat_id=sent_message.chat.id,
+                                        message_id=sent_message.message_id)
         except Exception:
             traceback.print_exc()
-            await bot.edit_message_text(error_info, chat_id=sent_message.chat.id, message_id=sent_message.message_id)
-
-
+            await bot.edit_message_text(error_info,
+                                        chat_id=sent_message.chat.id,
+                                        message_id=sent_message.message_id)
 
 
 if __name__ == '__main__':
     asyncio.run(main())
-
