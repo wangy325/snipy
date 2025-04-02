@@ -12,19 +12,21 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadLocalVariableHolder {
     // Java 8 提供的方法
-    private static final ThreadLocal<Integer> value = ThreadLocal.withInitial(() -> {
-        Random r = new Random();
-        return r.nextInt(10);
-    });
+    private static final ThreadLocal<Integer> VALUE =
+        ThreadLocal.withInitial(() -> {
+            Random r = new Random();
+            return r.nextInt(10);
+        });
 
+    /** 每个线程独享一个本地变量，互不影响*/
     static class Task implements Runnable {
 
         static void increment() {
-            value.set(value.get() + 1);
+            VALUE.set(VALUE.get() + 1);
         }
 
         static Integer getValue() {
-            return value.get();
+            return VALUE.get();
         }
 
         @Override

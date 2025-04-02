@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 /**
  *Author: wangy325
  *Date: 2024-08-07 20:00:13
- *Description: 
+ *Description: 线程争用
 **/
 public class Threading {
 
@@ -14,8 +14,8 @@ public class Threading {
             MyThread t = new MyThread();
             t.start();
         }
-
-        System.out.printf("shardInt: %d\n", MyThread.shardInt);  // uncertain output~
+        // uncertain output~
+        System.out.printf("shardInt: %d\n", MyThread.shardInt);
     }
 }
 
