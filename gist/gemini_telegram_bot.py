@@ -64,7 +64,7 @@ generation_config = types.GenerateContentConfig(
 gemini_chat_dict = {}
 gemini_pro_chat_dict = {}
 default_chat_dict = {}
-google_api_key = 'AIzaSyC-EXVc1aDFlJpRfau83XYjb_kTy1_pWZ8'
+google_api_key = ''
 gemini_client = genai.Client(api_key=google_api_key)
 
 # Prevent "model.generate_content" function from blocking the event loop.
@@ -174,7 +174,7 @@ async def main():
     # options = parser.parse_args()
     # print("Arg parse done.")
 
-    bot_token = '7436966069:AAGIoO4A5vMGvZHlMF6tMKCxVWifd0iyUaQ'
+    bot_token = ''
   
 
     # Init bot
