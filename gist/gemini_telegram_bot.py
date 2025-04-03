@@ -2,8 +2,9 @@
 
 import traceback
 import asyncio
-import google.generativeai as genai
 import telebot
+from google import genai
+from google.genai import types
 from telebot import TeleBot
 from telebot import asyncio_helper
 from telebot.async_telebot import AsyncTeleBot
@@ -25,104 +26,85 @@ os.environ['all_proxy'] = "socks5://127.0.0.1:7890"
 error_info = "⚠️⚠️⚠️\nSomething went wrong !\nplease try to change your prompt or contact the admin !"
 before_generate_info = "☁️Generating..."
 download_pic_notify = "☁️Loading picture..."
-model_1 = "gemini-2.0-flash"
-model_2 = "gemini-1.5-pro-latest"
+model_1 = "gemini-2.0-flash-exp"
+# model_1 = "gemini-2.0-flash"
+model_2 = "gemini-2.5-pro-exp-03-25"
 
 max_history = 30  #Number of historical records to keep
 
-generation_config = {
-    "temperature": 0.7,
-    "top_p": 1,
-    "top_k": 1,
-    "max_output_tokens": 2048,
-}
-
-safety_settings = [
-    {
-        "category": "HARM_CATEGORY_HARASSMENT",
-        "threshold": "BLOCK_NONE"
-    },
-    {
-        "category": "HARM_CATEGORY_HATE_SPEECH",
-        "threshold": "BLOCK_NONE"
-    },
-    {
-        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-        "threshold": "BLOCK_NONE"
-    },
-    {
-        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-        "threshold": "BLOCK_NONE"
-    },
-]
+# gemini configs
+generation_config = types.GenerateContentConfig(
+    temperature=0.3,
+    top_p=0.5,
+    top_k=1,
+    max_output_tokens=2048,
+    seed=30,
+    tools=[types.Tool(google_search=types.GoogleSearch())],
+    safety_settings=[
+        types.SafetySetting(
+            category='HARM_CATEGORY_HARASSMENT',
+            threshold='BLOCK_NONE'
+        ),
+        types.SafetySetting(
+            category='HARM_CATEGORY_HATE_SPEECH',
+            threshold='BLOCK_NONE'
+        ),
+        types.SafetySetting(
+            category='HARM_CATEGORY_SEXUALLY_EXPLICIT',
+            threshold='BLOCK_NONE'
+        ),
+        types.SafetySetting(
+            category='HARM_CATEGORY_DANGEROUS_CONTENT',
+            threshold='BLOCK_NONE'
+        ),
+    ]
+)
 
 # gemini
-gemini_player_dict = {}
-gemini_pro_player_dict = {}
-default_model_dict = {}
-
-
-# Prevent "create_canvas" function from blocking the event loop.
-async def make_new_gemini_canvas(model_name):
-    loop = asyncio.get_running_loop()
-
-    def create_canvas():
-        model = genai.GenerativeModel(
-            model_name=model_name,
-            generation_config=generation_config,
-            safety_settings=safety_settings,
-        )
-        canvas = model.start_chat()
-        return canvas
-
-    # Run the synchronous "create_canvas" function in a thread pool
-    canvas = await loop.run_in_executor(None, create_canvas)
-    return canvas
-
-
-# Prevent "send_message" function from blocking the event loop.
-async def send_message(player, message):
-    loop = asyncio.get_running_loop()
-    await loop.run_in_executor(None, player.send_message, message)
-
+gemini_chat_dict = {}
+gemini_pro_chat_dict = {}
+default_chat_dict = {}
+google_api_key = 'AIzaSyC-EXVc1aDFlJpRfau83XYjb_kTy1_pWZ8'
+gemini_client = genai.Client(api_key=google_api_key)
 
 # Prevent "model.generate_content" function from blocking the event loop.
 async def async_generate_content(model, contents):
     loop = asyncio.get_running_loop()
 
     def generate():
-        return model.generate_content(contents=contents)
+        return gemini_client.models.generate_content(model, contents=contents)
 
     response = await loop.run_in_executor(None, generate)
     return response
 
-
-async def gemini(bot, message, m, model_type):
-    player = None
+async def gemini(bot:TeleBot, message:Message, m:str, model_type:str):
+    chat = None
     if model_type == model_1:
-        player_dict = gemini_player_dict
+        chat_dict = gemini_chat_dict
     else:
-        player_dict = gemini_pro_player_dict
-    if str(message.from_user.id) not in player_dict:
-        player = await make_new_gemini_canvas(model_1)
-        player_dict[str(message.from_user.id)] = player
+        chat_dict = gemini_pro_chat_dict
+    if str(message.from_user.id) not in chat_dict:
+        chat = gemini_client.aio.chats.create(
+            model=model_type,
+            config= generation_config
+        )
+        chat_dict[str(message.from_user.id)] = chat
     else:
-        player = player_dict[str(message.from_user.id)]
-    if len(player.history) > max_history:
-        player.history = player.history[2:]
+        chat = chat_dict[str(message.from_user.id)]
+    # new api does not support chat history
     try:
         sent_message = await bot.reply_to(message, before_generate_info)
-        await send_message(player, m)
+        response = await chat.send_message(m)
         try:
             await split_and_send(bot,
                                  chat_id=sent_message.chat.id,
-                                 text=player.last.text,
+                                 text=response.text,
                                  message_id=sent_message.message_id,
                                  parse_mode="MarkdownV2")
         except:
             await split_and_send(bot,
                                  chat_id=sent_message.chat.id,
-                                 text=player.last.text,
+                                 text=response.text,
                                  message_id=sent_message.message_id)
 
     except Exception:
@@ -139,8 +121,8 @@ async def split_and_send(bot,
                          text: str,
                          message_id=None,
                          parse_mode=None):
-    slice_size = 3072   #默认最长消息长度
-    slice_step = 384 #默认长度内没有换行符时，向后查询的步长
+    slice_size = 3072  #默认最长消息长度
+    slice_step = 384  #默认长度内没有换行符时，向后查询的步长
     segments = []
     start = 0
     # print(len(text))
@@ -191,10 +173,9 @@ async def main():
     # parser.add_argument("GOOGLE_GEMINI_KEY", help="Google Gemini API key")
     # options = parser.parse_args()
     # print("Arg parse done.")
-    
-    bot_token = ''
-    google_api_key = ''
-    genai.configure(api_key=google_api_key)
+
+    bot_token = '7436966069:AAGIoO4A5vMGvZHlMF6tMKCxVWifd0iyUaQ'
+  
 
     # Init bot
     bot = AsyncTeleBot(bot_token)
@@ -202,8 +183,8 @@ async def main():
     await bot.delete_my_commands(scope=None, language_code=None)
     await bot.set_my_commands(commands=[
         telebot.types.BotCommand("start", "Start"),
-        telebot.types.BotCommand("gemini", "using gemini-2.0-flash"),
-        telebot.types.BotCommand("gemini_pro", "using gemini-1.5-pro"),
+        telebot.types.BotCommand("gemini", "using gemini-2.0-flash-exp"),
+        telebot.types.BotCommand("gemini_pro", "using gemini-2.5-pro-exp"),
         telebot.types.BotCommand("clear", "Clear all history"),
         telebot.types.BotCommand("switch", "switch default model")
     ], )
@@ -276,10 +257,10 @@ async def gemini_pro_handler(message: Message, bot: TeleBot) -> None:
 
 async def clear(message: Message, bot: TeleBot) -> None:
     # Check if the player is already in gemini_player_dict.
-    if (str(message.from_user.id) in gemini_player_dict):
-        del gemini_player_dict[str(message.from_user.id)]
-    if (str(message.from_user.id) in gemini_pro_player_dict):
-        del gemini_pro_player_dict[str(message.from_user.id)]
+    if (str(message.from_user.id) in gemini_chat_dict):
+        del gemini_chat_dict[str(message.from_user.id)]
+    if (str(message.from_user.id) in gemini_pro_chat_dict):
+        del gemini_pro_chat_dict[str(message.from_user.id)]
     await bot.reply_to(message, "Your history has been cleared")
 
 
@@ -287,26 +268,26 @@ async def switch(message: Message, bot: TeleBot) -> None:
     if message.chat.type != "private":
         await bot.reply_to(message, "This command is only for private chat !")
         return
-    # Check if the player is already in default_model_dict.
-    if str(message.from_user.id) not in default_model_dict:
-        default_model_dict[str(message.from_user.id)] = False
+    # Check if the player is already in default_chat_dict.
+    if str(message.from_user.id) not in default_chat_dict:
+        default_chat_dict[str(message.from_user.id)] = False
         await bot.reply_to(message, "Now you are using " + model_2)
         return
-    if default_model_dict[str(message.from_user.id)] == True:
-        default_model_dict[str(message.from_user.id)] = False
+    if default_chat_dict[str(message.from_user.id)] == True:
+        default_chat_dict[str(message.from_user.id)] = False
         await bot.reply_to(message, "Now you are using " + model_2)
     else:
-        default_model_dict[str(message.from_user.id)] = True
+        default_chat_dict[str(message.from_user.id)] = True
         await bot.reply_to(message, "Now you are using " + model_1)
 
 
 async def gemini_private_handler(message: Message, bot: TeleBot) -> None:
     m = message.text.strip()
-    if str(message.from_user.id) not in default_model_dict:
-        default_model_dict[str(message.from_user.id)] = True
+    if str(message.from_user.id) not in default_chat_dict:
+        default_chat_dict[str(message.from_user.id)] = True
         await gemini(bot, message, m, model_1)
     else:
-        if default_model_dict[str(message.from_user.id)]:
+        if default_chat_dict[str(message.from_user.id)]:
             await gemini(bot, message, m, model_1)
         else:
             await gemini(bot, message, m, model_2)
@@ -326,7 +307,6 @@ async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
         except Exception:
             traceback.print_exc()
             await bot.reply_to(message, error_info)
-        model = genai.GenerativeModel(model_1)
         contents = {
             "parts": [{
                 "mime_type": "image/jpeg",
@@ -339,7 +319,7 @@ async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
             await bot.edit_message_text(before_generate_info,
                                         chat_id=sent_message.chat.id,
                                         message_id=sent_message.message_id)
-            response = await async_generate_content(model, contents)
+            response = await async_generate_content(model_1, contents)
             await bot.edit_message_text(response.text,
                                         chat_id=sent_message.chat.id,
                                         message_id=sent_message.message_id)
@@ -358,7 +338,6 @@ async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
         except Exception:
             traceback.print_exc()
             await bot.reply_to(message, error_info)
-        model = genai.GenerativeModel(model_1)
         contents = {
             "parts": [{
                 "mime_type": "image/jpeg",
@@ -371,7 +350,7 @@ async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
             await bot.edit_message_text(before_generate_info,
                                         chat_id=sent_message.chat.id,
                                         message_id=sent_message.message_id)
-            response = await async_generate_content(model, contents)
+            response = await async_generate_content(model_1, contents)
             await bot.edit_message_text(response.text,
                                         chat_id=sent_message.chat.id,
                                         message_id=sent_message.message_id)
