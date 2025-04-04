@@ -1,5 +1,6 @@
 # A gemini + telegram bot script.
 
+import argparse
 import traceback
 import asyncio
 import telebot
@@ -30,7 +31,14 @@ model_1 = "gemini-2.0-flash-exp"
 # model_1 = "gemini-2.0-flash"
 model_2 = "gemini-2.5-pro-exp-03-25"
 
-max_history = 30  #Number of historical records to keep
+# Init args
+parser = argparse.ArgumentParser()
+parser.add_argument("TG_BOT_TOKEN", help="telegram token")
+parser.add_argument("GOOGLE_GEMINI_KEY", help="Google Gemini API key")
+parser.add_argument("WEB_HOOK", help="koyeb deploy webhook")
+options = parser.parse_args()
+print("Arg parse done.")
+
 
 # gemini configs
 generation_config = types.GenerateContentConfig(
@@ -64,8 +72,8 @@ generation_config = types.GenerateContentConfig(
 gemini_chat_dict = {}
 gemini_pro_chat_dict = {}
 default_chat_dict = {}
-google_api_key = ''
-gemini_client = genai.Client(api_key=google_api_key)
+# init gemini client
+gemini_client = genai.Client(api_key=options.GOOGLE_GEMINI_KEY)
 
 # Prevent "model.generate_content" function from blocking the event loop.
 async def async_generate_content(model, contents):
@@ -167,18 +175,9 @@ async def split_and_send(bot,
 
 
 async def main():
-    # Init args
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument("tg_token", help="telegram token")
-    # parser.add_argument("GOOGLE_GEMINI_KEY", help="Google Gemini API key")
-    # options = parser.parse_args()
-    # print("Arg parse done.")
-
-    bot_token = ''
-  
 
     # Init bot
-    bot = AsyncTeleBot(bot_token)
+    bot = AsyncTeleBot(options.TG_BOT_TOKEN)
     # await bot.set_webhook()
     await bot.delete_my_commands(scope=None, language_code=None)
     await bot.set_my_commands(commands=[
@@ -362,4 +361,8 @@ async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    WEB_HOOK = options.WEB_HOOK
+    if WEB_HOOK:
+        asyncio.run()
+    else:
+        asyncio.run(main())
