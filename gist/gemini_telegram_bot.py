@@ -11,17 +11,19 @@ from telebot import asyncio_helper
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
 from md2tgmd import escape
+import fastapi
+import uvicorn
+import os
+
 # proxy
 # https://www.pythonanywhere.com/forums/topic/32151/
 # asyncio_helper.proxy = 'http://proxy.server:3128'
 
 # for local debug only
-asyncio_helper.proxy = 'http://127.0.0.1:7890'
-import os
-
-os.environ['http_proxy'] = "http://127.0.0.1:7890"
-os.environ['https_proxy'] = "http://127.0.0.1:7890"
-os.environ['all_proxy'] = "socks5://127.0.0.1:7890"
+# asyncio_helper.proxy = 'http://127.0.0.1:7890'
+# os.environ['http_proxy'] = "http://127.0.0.1:7890"
+# os.environ['https_proxy'] = "http://127.0.0.1:7890"
+# os.environ['all_proxy'] = "socks5://127.0.0.1:7890"
 
 # global configs
 error_info = "⚠️⚠️⚠️\nSomething went wrong !\nplease try to change your prompt or contact the admin !"
@@ -32,48 +34,42 @@ model_1 = "gemini-2.0-flash-exp"
 model_2 = "gemini-2.5-pro-exp-03-25"
 
 # Init args
-parser = argparse.ArgumentParser()
-parser.add_argument("TG_BOT_TOKEN", help="telegram token")
-parser.add_argument("GOOGLE_GEMINI_KEY", help="Google Gemini API key")
-parser.add_argument("WEB_HOOK", help="koyeb deploy webhook")
-options = parser.parse_args()
+# parser = argparse.ArgumentParser()
+# parser.add_argument("--botoken", required=True, help="telegram token", default=os.environ.get("BOT_TOKEN"))
+# parser.add_argument("--apikey", required=True, help="Google Gemini API key", default=os.environ.get("API_KEY"))
+# parser.add_argument("--webhook", help="telegram bot deploy webhook. optional", default=os.environ.get("WEB_HOOK"))
+# options = parser.parse_args()
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+API_KEY = os.environ.get("API_KEY")
+WEB_HOOK = os.environ.get("WEB_HOOK", None)
 print("Arg parse done.")
-
 
 # gemini configs
 generation_config = types.GenerateContentConfig(
     temperature=0.3,
     top_p=0.5,
     top_k=1,
-    max_output_tokens=2048,
+    max_output_tokens=1024,
     seed=30,
     tools=[types.Tool(google_search=types.GoogleSearch())],
     safety_settings=[
-        types.SafetySetting(
-            category='HARM_CATEGORY_HARASSMENT',
-            threshold='BLOCK_NONE'
-        ),
-        types.SafetySetting(
-            category='HARM_CATEGORY_HATE_SPEECH',
-            threshold='BLOCK_NONE'
-        ),
-        types.SafetySetting(
-            category='HARM_CATEGORY_SEXUALLY_EXPLICIT',
-            threshold='BLOCK_NONE'
-        ),
-        types.SafetySetting(
-            category='HARM_CATEGORY_DANGEROUS_CONTENT',
-            threshold='BLOCK_NONE'
-        ),
-    ]
-)
+        types.SafetySetting(category='HARM_CATEGORY_HARASSMENT',
+                            threshold='BLOCK_NONE'),
+        types.SafetySetting(category='HARM_CATEGORY_HATE_SPEECH',
+                            threshold='BLOCK_NONE'),
+        types.SafetySetting(category='HARM_CATEGORY_SEXUALLY_EXPLICIT',
+                            threshold='BLOCK_NONE'),
+        types.SafetySetting(category='HARM_CATEGORY_DANGEROUS_CONTENT',
+                            threshold='BLOCK_NONE'),
+    ])
 
 # gemini
 gemini_chat_dict = {}
 gemini_pro_chat_dict = {}
 default_chat_dict = {}
 # init gemini client
-gemini_client = genai.Client(api_key=options.GOOGLE_GEMINI_KEY)
+gemini_client = genai.Client(api_key=API_KEY)
+
 
 # Prevent "model.generate_content" function from blocking the event loop.
 async def async_generate_content(model, contents):
@@ -85,17 +81,16 @@ async def async_generate_content(model, contents):
     response = await loop.run_in_executor(None, generate)
     return response
 
-async def gemini(bot:TeleBot, message:Message, m:str, model_type:str):
+
+async def gemini(bot: TeleBot, message: Message, m: str, model_type: str):
     chat = None
     if model_type == model_1:
         chat_dict = gemini_chat_dict
     else:
         chat_dict = gemini_pro_chat_dict
     if str(message.from_user.id) not in chat_dict:
-        chat = gemini_client.aio.chats.create(
-            model=model_type,
-            config= generation_config
-        )
+        chat = gemini_client.aio.chats.create(model=model_type,
+                                              config=generation_config)
         chat_dict[str(message.from_user.id)] = chat
     else:
         chat = chat_dict[str(message.from_user.id)]
@@ -174,47 +169,65 @@ async def split_and_send(bot,
                                    parse_mode=parse_mode)
 
 
-async def main():
+# Init bot
+bot = AsyncTeleBot(BOT_TOKEN)
 
-    # Init bot
-    bot = AsyncTeleBot(options.TG_BOT_TOKEN)
-    # await bot.set_webhook()
-    await bot.delete_my_commands(scope=None, language_code=None)
-    await bot.set_my_commands(commands=[
-        telebot.types.BotCommand("start", "Start"),
-        telebot.types.BotCommand("gemini", "using gemini-2.0-flash-exp"),
-        telebot.types.BotCommand("gemini_pro", "using gemini-2.5-pro-exp"),
-        telebot.types.BotCommand("clear", "Clear all history"),
-        telebot.types.BotCommand("switch", "switch default model")
-    ], )
-    print("Bot init done.")
+# used for webhook
+app = fastapi.FastAPI(docs_url=None, )
+# WEBHOOK_HOST = 'https://accurate-puma.koyeb.app'
+WEBHOOK_HOST = WEB_HOOK
+WEBHOOK_PORT = 8443
+WEBHOOK_LISTEN = '0.0.0.0'
+#  no ssl used for koyeb
+WEBHOOK_URL = f"{WEBHOOK_HOST}/{BOT_TOKEN}/"
 
-    # Init commands
-    bot.register_message_handler(start, commands=['start'], pass_bot=True)
-    bot.register_message_handler(gemini_handler,
-                                 commands=['gemini'],
-                                 pass_bot=True)
-    bot.register_message_handler(gemini_pro_handler,
-                                 commands=['gemini_pro'],
-                                 pass_bot=True)
-    bot.register_message_handler(clear, commands=['clear'], pass_bot=True)
-    bot.register_message_handler(switch, commands=['switch'], pass_bot=True)
-    bot.register_message_handler(gemini_photo_handler,
-                                 content_types=["photo"],
-                                 pass_bot=True)
-    bot.register_message_handler(
-        gemini_private_handler,
-        func=lambda message: message.chat.type == "private",
-        content_types=['text'],
-        pass_bot=True)
 
-    # Start bot
-    print("Starting Gemini_Telegram_Bot.")
+# process webhook calls
+@app.post(f'/{BOT_TOKEN}/')
+async def handle(update: dict):
+    if update:
+        update = telebot.types.Update.de_json(update)
+        await bot.process_new_updates([update])
+    else:
+        return
+
+
+async def set_webhook(url, ssl=False, ssl_cert=None):
+    await bot.remove_webhook()
+    if ssl:
+        await bot.set_webhook(url=url, certificate=open(ssl_cert, 'r'))
+    else:
+        await bot.set_webhook(url=url)
+
+
+async def remove_webhook():
+    await bot.remove_webhook()
+
+# 以webhook形式运行
+def run_webhook():
+    asyncio.run(set_webhook(WEBHOOK_URL))
+    # start aiohttp server
+    print("Starting webhook telegram bot.")
+    # loop = asyncio.get_running_loop()
+    # def webhook_app(): uvicorn.run(
+    #         app,
+    #         host=WEBHOOK_LISTEN,
+    #         port=WEBHOOK_PORT,
+    #     )
+    # await loop.run_in_executor(None, webhook_app)
+    # 本身开了协程
+    uvicorn.run(app, host=WEBHOOK_LISTEN, port=WEBHOOK_PORT)
+
+
+async def run_polling():
+    await remove_webhook()
+    print("Starting polling telegram bot.")
     await bot.polling(none_stop=True)
 
 
-    ####
-async def start(message: Message, bot: TeleBot) -> None:
+#### bot commands
+@bot.message_handler(commands=['start'])
+async def start(message: Message) -> None:
     try:
         await bot.reply_to(
             message,
@@ -226,7 +239,8 @@ async def start(message: Message, bot: TeleBot) -> None:
         await bot.reply_to(message, error_info)
 
 
-async def gemini_handler(message: Message, bot: TeleBot) -> None:
+@bot.message_handler(commands=['gemini'])
+async def gemini_handler(message: Message) -> None:
     try:
         m = message.text.strip().split(maxsplit=1)[1].strip()
     except IndexError:
@@ -240,7 +254,8 @@ async def gemini_handler(message: Message, bot: TeleBot) -> None:
     await gemini(bot, message, m, model_1)
 
 
-async def gemini_pro_handler(message: Message, bot: TeleBot) -> None:
+@bot.message_handler(commands=['gemini_pro'])
+async def gemini_pro_handler(message: Message) -> None:
     try:
         m = message.text.strip().split(maxsplit=1)[1].strip()
     except IndexError:
@@ -254,7 +269,8 @@ async def gemini_pro_handler(message: Message, bot: TeleBot) -> None:
     await gemini(bot, message, m, model_2)
 
 
-async def clear(message: Message, bot: TeleBot) -> None:
+@bot.message_handler(commands=['clear'])
+async def clear(message: Message) -> None:
     # Check if the player is already in gemini_player_dict.
     if (str(message.from_user.id) in gemini_chat_dict):
         del gemini_chat_dict[str(message.from_user.id)]
@@ -263,7 +279,8 @@ async def clear(message: Message, bot: TeleBot) -> None:
     await bot.reply_to(message, "Your history has been cleared")
 
 
-async def switch(message: Message, bot: TeleBot) -> None:
+@bot.message_handler(commands=['switch'])
+async def switch(message: Message) -> None:
     if message.chat.type != "private":
         await bot.reply_to(message, "This command is only for private chat !")
         return
@@ -279,8 +296,9 @@ async def switch(message: Message, bot: TeleBot) -> None:
         default_chat_dict[str(message.from_user.id)] = True
         await bot.reply_to(message, "Now you are using " + model_1)
 
-
-async def gemini_private_handler(message: Message, bot: TeleBot) -> None:
+#  response all other conversations
+@bot.message_handler(func=lambda message: message.chat.type == "private", content_types=['text'])
+async def gemini_private_handler(message: Message) -> None:
     m = message.text.strip()
     if str(message.from_user.id) not in default_chat_dict:
         default_chat_dict[str(message.from_user.id)] = True
@@ -292,7 +310,8 @@ async def gemini_private_handler(message: Message, bot: TeleBot) -> None:
             await gemini(bot, message, m, model_2)
 
 
-async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
+# @bot.message_handler(commands=['photo'])
+async def gemini_photo_handler(message: Message) -> None:
     if message.chat.type != "private":
         s = message.caption
         if not s or not (s.startswith("/gemini")):
@@ -361,8 +380,8 @@ async def gemini_photo_handler(message: Message, bot: TeleBot) -> None:
 
 
 if __name__ == '__main__':
-    WEB_HOOK = options.WEB_HOOK
+   # Start the bot
     if WEB_HOOK:
-        asyncio.run()
+        run_webhook()
     else:
-        asyncio.run(main())
+        asyncio.run(run_polling())
