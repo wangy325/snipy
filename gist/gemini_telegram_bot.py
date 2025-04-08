@@ -1,4 +1,7 @@
 # A gemini + telegram bot script.
+"""
+Deprecated
+"""
 
 import argparse
 import traceback
@@ -182,6 +185,16 @@ WEBHOOK_LISTEN = '0.0.0.0'
 #  no ssl used for koyeb
 WEBHOOK_URL = f"{WEBHOOK_HOST}/{BOT_TOKEN}/"
 
+async def init_commands():
+    await bot.delete_my_commands(scope=None, language_code=None)
+    await bot.set_my_commands(commands=[
+        telebot.types.BotCommand("start", "Start"),
+        telebot.types.BotCommand("gemini", "Using gemini-2.0-flash-exp"),
+        telebot.types.BotCommand("gemini_pro", "Using gemini-2.5-pro-exp"),
+        telebot.types.BotCommand("clear", "Clear all history"),
+        telebot.types.BotCommand("switch", "Switch to default model(2.0-flash-exp)"),
+        telebot.types.BotCommand("photo", "image2text"),
+    ], )
 
 # process webhook calls
 @app.post(f'/{BOT_TOKEN}/')
@@ -192,7 +205,6 @@ async def handle(update: dict):
     else:
         return
 
-
 async def set_webhook(url, ssl=False, ssl_cert=None):
     await bot.remove_webhook()
     if ssl:
@@ -200,12 +212,12 @@ async def set_webhook(url, ssl=False, ssl_cert=None):
     else:
         await bot.set_webhook(url=url)
 
-
 async def remove_webhook():
     await bot.remove_webhook()
 
 # 以webhook形式运行
 def run_webhook():
+    asyncio.run(init_commands())
     asyncio.run(set_webhook(WEBHOOK_URL))
     # start aiohttp server
     print("Starting webhook telegram bot.")
@@ -217,10 +229,13 @@ def run_webhook():
     #     )
     # await loop.run_in_executor(None, webhook_app)
     # 本身开了协程
-    uvicorn.run(app, host=WEBHOOK_LISTEN, port=WEBHOOK_PORT)
+    config = uvicorn.Config(app, host=WEBHOOK_LISTEN, port=WEBHOOK_PORT)
+    server = uvicorn.Server(config)
+    asyncio.run(server.serve())
 
 
 async def run_polling():
+    await init_commands()
     await remove_webhook()
     print("Starting polling telegram bot.")
     await bot.polling(none_stop=True)
@@ -358,12 +373,11 @@ async def gen_image(message:Message, caption:str):
         traceback.print_exc()
         await bot.edit_message_text(error_info,
                                         chat_id=sent_message.chat.id,
-                                        message_id=sent_message.message_id)
-
-
+                                        message_id=sent_message.message_id)    
+    
 if __name__ == '__main__':
-   # Start the bot
+    # Start the bot
     if WEB_HOOK:
         run_webhook()
     else:
-        asyncio.run(run_polling())
+       asyncio.run(run_polling())
