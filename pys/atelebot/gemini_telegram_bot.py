@@ -20,10 +20,10 @@ import os
 # asyncio_helper.proxy = 'http://proxy.server:3128'
 
 # for local debug only
-# asyncio_helper.proxy = 'http://127.0.0.1:7890'
-# os.environ['http_proxy'] = "http://127.0.0.1:7890"
-# os.environ['https_proxy'] = "http://127.0.0.1:7890"
-# os.environ['all_proxy'] = "socks5://127.0.0.1:7890"
+asyncio_helper.proxy = 'http://127.0.0.1:7890'
+os.environ['http_proxy'] = "http://127.0.0.1:7890"
+os.environ['https_proxy'] = "http://127.0.0.1:7890"
+os.environ['all_proxy'] = "socks5://127.0.0.1:7890"
 
 # global configs
 error_info = "⚠️⚠️⚠️\nSomething went wrong !\nplease try to change your prompt or contact the admin !"
@@ -39,6 +39,7 @@ model_2 = "gemini-2.5-pro-exp-03-25"
 # parser.add_argument("--apikey", required=True, help="Google Gemini API key", default=os.environ.get("API_KEY"))
 # parser.add_argument("--webhook", help="telegram bot deploy webhook. optional", default=os.environ.get("WEB_HOOK"))
 # options = parser.parse_args()
+BOT_NAME = '@wygemibot'
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 API_KEY = os.environ.get("API_KEY")
 WEB_HOOK = os.environ.get("WEB_HOOK", None)
@@ -296,85 +297,66 @@ async def switch(message: Message) -> None:
         default_chat_dict[str(message.from_user.id)] = True
         await bot.reply_to(message, "Now you are using " + model_1)
 
-#  response all other conversations
+#  handle all other text messages in private chat
 @bot.message_handler(func=lambda message: message.chat.type == "private", content_types=['text'])
 async def gemini_private_handler(message: Message) -> None:
     m = message.text.strip()
-    if str(message.from_user.id) not in default_chat_dict:
-        default_chat_dict[str(message.from_user.id)] = True
+    from_who = message.from_user.id
+    if str(from_who) not in default_chat_dict:
+        default_chat_dict[str(from_who)] = True
         await gemini(bot, message, m, model_1)
     else:
-        if default_chat_dict[str(message.from_user.id)]:
+        if default_chat_dict[str(from_who)]:
             await gemini(bot, message, m, model_1)
         else:
             await gemini(bot, message, m, model_2)
 
+# handle group/channel '@' text chat
+@bot.message_handler(regexp=BOT_NAME, chat_types=['group','supergroup','channel'], content_types=['text'])
+async def handle_group_chat(message:Message) -> None:
+    print(f'group message: {message.text.strip()}')
+    await gemini_private_handler(message)
 
-# @bot.message_handler(commands=['photo'])
+# image2text
+@bot.message_handler(commands=['photo'])
 async def gemini_photo_handler(message: Message) -> None:
     if message.chat.type != "private":
-        s = message.caption
-        if not s or not (s.startswith("/gemini")):
+        caption = message.caption
+        if not caption or not (caption.startswith("/gemini")):
             return
-        try:
-            prompt = s.strip().split(maxsplit=1)[1].strip() if len(
-                s.strip().split(maxsplit=1)) > 1 else ""
-            file_path = await bot.get_file(message.photo[-1].file_id)
-            sent_message = await bot.reply_to(message, download_pic_notify)
-            downloaded_file = await bot.download_file(file_path.file_path)
-        except Exception:
-            traceback.print_exc()
-            await bot.reply_to(message, error_info)
-        contents = {
-            "parts": [{
-                "mime_type": "image/jpeg",
-                "data": downloaded_file
-            }, {
-                "text": prompt
-            }]
-        }
-        try:
-            await bot.edit_message_text(before_generate_info,
-                                        chat_id=sent_message.chat.id,
-                                        message_id=sent_message.message_id)
-            response = await async_generate_content(model_1, contents)
-            await bot.edit_message_text(response.text,
-                                        chat_id=sent_message.chat.id,
-                                        message_id=sent_message.message_id)
-        except Exception:
-            traceback.print_exc()
-            await bot.edit_message_text(error_info,
-                                        chat_id=sent_message.chat.id,
-                                        message_id=sent_message.message_id)
+        prompt = message.caption.strip().split(maxsplit=1)[1].strip() if len(message.caption.strip().split(maxsplit=1)) > 1 else ""
+        await gen_image(message, prompt)
     else:
         s = message.caption if message.caption else ""
-        try:
-            prompt = s.strip()
-            file_path = await bot.get_file(message.photo[-1].file_id)
-            sent_message = await bot.reply_to(message, download_pic_notify)
-            downloaded_file = await bot.download_file(file_path.file_path)
-        except Exception:
-            traceback.print_exc()
-            await bot.reply_to(message, error_info)
-        contents = {
+        gen_image(message, s.strip())
+
+async def gen_image(message:Message, caption:str):
+    try:
+        file_path = await bot.get_file(message.photo[-1].file_id)
+        sent_message = await bot.reply_to(message, download_pic_notify)
+        downloaded_file = await bot.download_file(file_path.file_path)
+    except Exception:
+        traceback.print_exc()
+        await bot.reply_to(message, error_info)
+    contents = {
             "parts": [{
                 "mime_type": "image/jpeg",
                 "data": downloaded_file
             }, {
-                "text": prompt
+                "text": caption
             }]
         }
-        try:
-            await bot.edit_message_text(before_generate_info,
+    try:
+        await bot.edit_message_text(before_generate_info,
                                         chat_id=sent_message.chat.id,
                                         message_id=sent_message.message_id)
-            response = await async_generate_content(model_1, contents)
-            await bot.edit_message_text(response.text,
+        response = await async_generate_content(model_1, contents)
+        await bot.edit_message_text(response.text,
                                         chat_id=sent_message.chat.id,
                                         message_id=sent_message.message_id)
-        except Exception:
-            traceback.print_exc()
-            await bot.edit_message_text(error_info,
+    except Exception:
+        traceback.print_exc()
+        await bot.edit_message_text(error_info,
                                         chat_id=sent_message.chat.id,
                                         message_id=sent_message.message_id)
 
