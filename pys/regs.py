@@ -1,9 +1,17 @@
 import re
+
 #  python reg
 
 #  match youtube url and prefix/suffix words
 reg = '(.*)(https?://(?:www\\.)?[a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[a-zA-Z0-9@:%_+.~#?&//=-]*)(.*)'
 reg_yt = 'https?://(www\\.)?(youtube\\.com/watch\\?v=|youtu\\.be/)[A-Za-z0-9_-]+'
+
+url_reg = ('(.*)(https?://(?:www\\.)?[a-zA-Z0-9@:%._+~#=]{1,256}\\'
+           '.[a-zA-Z0-9()]{1,6}\\b[a-zA-Z0-9@:%_+.~#?&//=-]*)(.*)')
+yt_reg = 'https?://(www\\.)?(youtube\\.com/watch\\?v=|youtu\\.be/)[A-Za-z0-9_-]+'
+
+pattern_msg = re.compile(url_reg)
+pattern_yt = re.compile(yt_reg)
 
 pattern = re.compile(reg)
 
@@ -23,13 +31,12 @@ urls = rel3.group(2)
 yrel = pattern2.search(str3).group()
 
 
-
-
 def fun(x, **kwargs):
     print(x)
     if kwargs:
         print(kwargs.get('name'))
-        
+
+
 fun(8)
 
-fun(10, name= 'google')
+fun(10, name='google')
