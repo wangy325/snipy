@@ -134,12 +134,14 @@ public class InsertSort {
     }
 
     /**
-     * <a href = "https://zh.wikipedia.org/wiki/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F">希尔排序</a>
+     * <a href =
+     * "https://zh.wikipedia.org/wiki/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F">
+     * 希尔排序</a>
      * <p>
      * 简单讲，希尔排序是带<b>步长</b>的插入排序。
      * <br>
-     * 希尔排序通过【h1, h2,...,hk】步长序列分别对数组中的元素进行插入排序。步长序列是任意的，只要保证
-     * <code>h1 =1</code>即可。
+     * 希尔排序通过【h1, h2,...,hk】步长序列分别对数组中的元素进行插入排序。
+     * 步长序列是任意的，只要保证<code>h1 =1</code>即可。
      * <br>
      * 常用的步长序列（不是最好的）为 h(k) = h(k+1)/2，该序列的最坏时间复杂度为O(N^2)。
      * <p>
@@ -162,9 +164,9 @@ public class InsertSort {
     }
 
     public static void main(String[] args) {
-        int[] a = new int[]{34, 16, 25, 8, 56, 42, 17};
+        int[] a = new int[] { 34, 16, 25, 8, 56, 42, 17 };
 
-//        InsertSort.sort(a);
+        // InsertSort.sort(a);
 
         InsertSort.shellSort(a);
         System.out.println(Arrays.toString(a));

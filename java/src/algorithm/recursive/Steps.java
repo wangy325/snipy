@@ -58,7 +58,8 @@ import java.util.HashMap;
  *     </li>
  * </ul>
  * <p>
- * 关于第一个问题，可以在编码时限制递归深度。不过如此处理可能有悖于业务逻辑，需要具体考虑。
+ * 关于第一个问题，可以在编码时限制递归深度。不过如此处理可能有悖于业务逻辑，
+ * 需要具体考虑。
  * <p>
  * 关于重复计算，还以上述问题为例：
  * <pre>
@@ -75,7 +76,8 @@ import java.util.HashMap;
  *                  F(4) ...
  * </pre>
  * <p>
- * 可以看到，F(4)和F(3)都计算了多次。可以引入一个表，用于记录已经计算过的值，这样可以减少计算的次数。
+ * 可以看到，F(4)和F(3)都计算了多次。可以引入一个表，用于记录已经计算过的值，
+ * 这样可以减少计算的次数。
  * <p>
  * <b>一般地，所有的递归问题，都可以转化为使用一般代码实现。</b>
  *
@@ -84,7 +86,7 @@ import java.util.HashMap;
  * @date 2021/7/2 / 10:47
  */
 public class Steps {
-    private static HashMap resultSet = new HashMap();
+    private static HashMap<Integer, Integer> resultSet = new HashMap<>();
 
     // 递归实现
     // 时间复杂度O(n)，空间复杂度O(n)

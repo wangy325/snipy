@@ -9,7 +9,7 @@ import java.util.Objects;
  * @version 1.0
  * @date 2021/6/21 / 22:23
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class NodeList<E> {
 
     private Node<E> head;
@@ -17,13 +17,13 @@ public class NodeList<E> {
     private int size;
 
     /*
-      插入头部
-      插入尾部
-      根据index获取元素
-      根据值删除
-      根据index删除
-      反转链表元素
-      判断回文字符串
+     * 插入头部
+     * 插入尾部
+     * 根据index获取元素
+     * 根据值删除
+     * 根据index删除
+     * 反转链表元素
+     * 判断回文字符串
      */
 
     public NodeList() {
@@ -55,7 +55,8 @@ public class NodeList<E> {
     private void insertHead(Node node) {
         node.next = head;
         head = node;
-        if (++size == 1) tail = head;
+        if (++size == 1)
+            tail = head;
     }
 
     void insertTail(E e) {
@@ -66,7 +67,8 @@ public class NodeList<E> {
     private void insertTail(Node node) {
         tail.next = node;
         tail = node;
-        if (++size == 1) head = tail;
+        if (++size == 1)
+            head = tail;
     }
 
     /**
@@ -98,7 +100,8 @@ public class NodeList<E> {
     }
 
     E get(int index) {
-        if (index >= size) throw new IndexOutOfBoundsException("index must >= 0 and < " + size);
+        if (index >= size)
+            throw new IndexOutOfBoundsException("index must >= 0 and < " + size);
         Node<E> p = head;
         while (index > 0) {
             p = p.next;
@@ -110,7 +113,8 @@ public class NodeList<E> {
     boolean contains(E e) {
         Node<E> p = head;
         while (p != null) {
-            if (p.data.equals(e)) return true;
+            if (p.data.equals(e))
+                return true;
             p = p.next;
         }
         return false;
@@ -126,7 +130,8 @@ public class NodeList<E> {
         Node<E> p = head;
         int pos = 0;
         while (p != null) {
-            if (p.data.equals(e)) return pos;
+            if (p.data.equals(e))
+                return pos;
             p = p.next;
             pos++;
         }
@@ -156,10 +161,12 @@ public class NodeList<E> {
      * <p>
      * 时间复杂度 O(n)
      *
-     * @param index index of element in linked list, Analogous to the index semantics of an array.
+     * @param index index of element in linked list, Analogous to the index
+     *              semantics of an array.
      */
     void remove(int index) {
-        if (index >= size) throw new IndexOutOfBoundsException("index must >= 0 and < " + size);
+        if (index >= size)
+            throw new IndexOutOfBoundsException("index must >= 0 and < " + size);
         Node<E> del = head;
         Node<E> l = head;
         for (int i = 0; i < index; i++) {
@@ -248,16 +255,16 @@ public class NodeList<E> {
      */
     void reverse() {
         /*
-         引入节点，该节点的next总是指向新反转过程中的最新节点；
-         当所有的节点遍历完成时，其next指向反转后的head；
-        */
+         * 引入节点，该节点的next总是指向新反转过程中的最新节点；
+         * 当所有的节点遍历完成时，其next指向反转后的head；
+         */
         Node<E> lead = node(null);
         lead.next = head;
         // 从第二个节点开始，反转链表
         Node<E> cur = head.next;
         /*
-         引入此节点用来记录当前遍历节点的下一个节点，
-         避免反转过程中链表"断裂"
+         * 引入此节点用来记录当前遍历节点的下一个节点，
+         * 避免反转过程中链表"断裂"
          */
         Node<E> tmp;
         while (cur != null) {
@@ -278,7 +285,8 @@ public class NodeList<E> {
      * @param node 标记节点
      */
     private void reverse(Node<E> node) {
-        if (!contains(node.data)) return;
+        if (!contains(node.data))
+            return;
         Node<E> h = new Node(null);
         h.next = node;
         Node<E> cur = head;
@@ -303,7 +311,8 @@ public class NodeList<E> {
      * @return true yes，false no
      */
     boolean isPalindrome() {
-        if (head == null) return false;
+        if (head == null)
+            return false;
         Node<E> slow = head;
         Node<E> fast = head;
         while (fast.next != null && fast.next.next != null) {
@@ -334,13 +343,15 @@ public class NodeList<E> {
         try {
             if (b) {
                 while (slow != null) {
-                    if (slow.data != pre.data) return false;
+                    if (slow.data != pre.data)
+                        return false;
                     slow = slow.next;
                     pre = pre.next;
                 }
             } else {
                 while (slow.next != null) {
-                    if (slow.next.data != pre.data) return false;
+                    if (slow.next.data != pre.data)
+                        return false;
                     slow = slow.next;
                     pre = pre.next;
                 }
@@ -357,17 +368,20 @@ public class NodeList<E> {
     void printAll() {
         System.out.print("LinkedList: [");
         if (size == 1) {
-            System.out.print(getHead() + "/" + getTail() + "/" + get(0));
+            System.out.print(getHead() + "/"
+                    + getTail() + "/" + get(0));
         } else {
-            System.out.print(getHead() + "(" + getIndex(getHead()) + "), ");
+            System.out.print(getHead()
+                    + "(" + getIndex(getHead()) + "), ");
             for (int i = 1; i < size - 1; i++) {
-                System.out.print(get(i) + "(" + getIndex(get(i)) + "), ");
+                System.out.print(get(i)
+                        + "(" + getIndex(get(i)) + "), ");
             }
-            System.out.print(getTail() + "(" + getIndex(getTail()) + ")");
+            System.out.print(getTail()
+                    + "(" + getIndex(getTail()) + ")");
         }
         System.out.println("]");
     }
-
 
     static class Node<U> {
         U data;
@@ -380,12 +394,15 @@ public class NodeList<E> {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
 
             Node<?> node = (Node<?>) o;
 
-            if (!Objects.equals(data, node.data)) return false;
+            if (!Objects.equals(data, node.data))
+                return false;
             return Objects.equals(next, node.next);
         }
 
@@ -414,7 +431,7 @@ public class NodeList<E> {
         System.out.println("contains 9? " + nl.contains(9));
 
         System.out.println("++++++ remove element ++++++");
-        nl.remove(new Integer(11));
+        nl.remove(Integer.valueOf(11));
         nl.printAll();
 
         nl.fastRemove(10);
@@ -432,26 +449,28 @@ public class NodeList<E> {
         nl.printAll();
 
         System.out.println("++++++ judge palindrome ++++++");
-        String[] s = new String[]{"r", "e", "f", "f", "e", "r"};
-//        String[] s = new String[]{"r", "e", "f", "f", "e", "p"};
-//        String[] s = new String[]{"r", "e", "f", "e", "r"};
-//        String[] s = new String[]{"r", "e", "f", "e", "p"};
-//        String[] s = new String[]{"r"};
-//        String[] s = new String[]{"r", "s"};
-//        String[] s = new String[]{"r", "r"};
-//        String[] s = new String[]{"r", "s", "r"};
-//        String[] s = new String[]{"r", "s", "t"};
+        String[] s = new String[] { "r", "e", "f", "f", "e", "r" };
+        // String[] s = new String[]{"r", "e", "f", "f", "e", "p"};
+        // String[] s = new String[]{"r", "e", "f", "e", "r"};
+        // String[] s = new String[]{"r", "e", "f", "e", "p"};
+        // String[] s = new String[]{"r"};
+        // String[] s = new String[]{"r", "s"};
+        // String[] s = new String[]{"r", "r"};
+        // String[] s = new String[]{"r", "s", "r"};
+        // String[] s = new String[]{"r", "s", "t"};
 
         NodeList<String> stringNodeList = new NodeList<>();
         for (String str : s) {
             stringNodeList.insertHead(str);
         }
         stringNodeList.printAll();
-        /*Node<String> p = stringNodeList.head;
-        for (int i = 0; i < stringNodeList.size; i++) {
-            System.out.println(p + " --> " + p.next);
-            p = p.next;
-        }*/
+        /*
+         * Node<String> p = stringNodeList.head;
+         * for (int i = 0; i < stringNodeList.size; i++) {
+         * System.out.println(p + " --> " + p.next);
+         * p = p.next;
+         * }
+         */
         System.out.println(stringNodeList.isPalindrome());
 
         System.out.println(stringNodeList.get(5));

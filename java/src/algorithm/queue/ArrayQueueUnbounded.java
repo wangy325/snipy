@@ -17,7 +17,8 @@ public class ArrayQueueUnbounded {
     // index of head element
     private int head;
     /*
-       关于tail指针，一般是将tail指向最新的可以插入元素的index，即tail是一个空槽（slot）：
+       关于tail指针，一般是将tail指向最新的可以插入元素的index，
+       即tail是一个空槽（slot）：
        ===================================================
         data[0]                                   data[7]
         |    |    |  5  |  6  |  9  |  16  |      |     |

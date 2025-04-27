@@ -4,25 +4,31 @@ import java.util.Arrays;
 
 /**
  * 队列的循环数组另一种实现，参考：
- * <a href="https://www.baeldung.com/java-ring-buffer">Implementing a Ring Buffer in Java</a>
+ * <a href="https://www.baeldung.com/java-ring-buffer">
+ * Implementing a RingBuffer in Java</a>
  *
  * <p>
  * 这种方法的解决思路是：
  * <ul>
- *     <li>
- *         1. 引入2个变量，{@link CircularBufferVariety#readSequence}和{@link CircularBufferVariety#writeSequence},
- *         分别记录元素入队和出队的次数；初始化时，readSequence = 0， writeSequence = -1；writeSequence=-1的好处在于其实际上
- *         相当于<b>直接指向</b>了队列队尾元素的index；
- *     </li>
- *     <li>
- *         2. 为了循环使用数组中的slot，可以使用<code>writeSequence % N</code>取模的方式找到当前队列队尾的元素对应的index；
- *     </li>
- *     <li>
- *         3. 当readSequence > writeSequence时，即可认为队列为空；
- *     </li>
- *     <li>
- *         4. 当（writeSequence - readSequence）+ 1 == {@link CircularBufferVariety#data}.length时，即可认为队列已满；
- *     </li>
+ * <li>
+ * 1.
+ * 引入2个变量，{@link CircularBufferVariety#readSequence}和
+ * {@link CircularBufferVariety#writeSequence},
+ * 分别记录元素入队和出队的次数；初始化时，readSequence = 0， writeSequence =
+ * -1；writeSequence=-1的好处在于其实际上
+ * 相当于<b>直接指向</b>了队列队尾元素的index；
+ * </li>
+ * <li>
+ * 2. 为了循环使用数组中的slot，可以使用<code>writeSequence % N</code>取模
+ * 的方式找到当前队列队尾的元素对应的index；
+ * </li>
+ * <li>
+ * 3. 当readSequence > writeSequence时，即可认为队列为空；
+ * </li>
+ * <li>
+ * 4. 当（writeSequence - readSequence）+ 1 ==
+ * {@link CircularBufferVariety#data}.length时，即可认为队列已满；
+ * </li>
  * </ul>
  *
  * @author wangy
@@ -55,17 +61,19 @@ public class CircularBufferVariety {
     }
 
     int enQueue(int e) {
-        if (isFull()) throw new RuntimeException("Queue full!");
+        if (isFull())
+            throw new RuntimeException("Queue full!");
         data[++writeSequence % data.length] = e;
         return e;
     }
 
     int deQueue() {
-        if (isEmpty()) throw new RuntimeException("Queue empty!");
+        if (isEmpty())
+            throw new RuntimeException("Queue empty!");
         return data[readSequence++ % data.length];
     }
 
-    void printAll(){
+    void printAll() {
         System.out.println("数组：" + Arrays.toString(data));
         System.out.print("队列：[");
         // 从队头到队尾

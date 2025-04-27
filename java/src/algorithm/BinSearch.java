@@ -22,8 +22,7 @@ public class BinSearch {
             int mid = (low + high) / 2;
             if (list.get(mid) > key) {
                 high = mid - 1;
-            }
-            else if (list.get(mid) < key) {
+            } else if (list.get(mid) < key) {
                 low = mid + 1;
             } else {
                 return mid;
@@ -41,6 +40,6 @@ public class BinSearch {
         int i = BinSearch.binSearch(al, 33);
         System.out.println(i);
 
-        System.out.println(Collections.binarySearch(al,33));
+        System.out.println(Collections.binarySearch(al, 33));
     }
 }

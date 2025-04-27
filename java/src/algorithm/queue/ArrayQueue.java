@@ -17,7 +17,8 @@ public class ArrayQueue {
     // index of head element
     private int head;
     /*
-        关于tail指针，一般是将tail指向最新的可以插入元素的index，即tail是一个空槽（slot）：
+        关于tail指针，一般是将tail指向最新的可以插入元素的index，
+        即tail是一个空槽（slot）：
         ===================================================
          data[0]                                   data[7]
          |    |    |  5  |  6  |  9  |  16  |      |     |
@@ -40,7 +41,8 @@ public class ArrayQueue {
                                        tail
          ===================================================
 
-         特殊地，当tail = cap且head != 0时，数组明明有空间，元素却无法入队，这时候就需要将head-tail指针重新整理了：
+         特殊地，当tail = cap且head != 0时，数组明明有空间，元素却无法入队，
+         这时候就需要将head-tail指针重新整理了：
          =======================================================
          data[0]                                   data[7]
          |    |    |     |     |     |  18  |  34  |  45  |
@@ -134,9 +136,13 @@ public class ArrayQueue {
 
         System.out.println(aq.deQueue());
         System.out.println(aq.deQueue());
-//        System.out.println(aq.deQueue());
+        // System.out.println(aq.deQueue());
 
-        System.out.printf("队列头尾索引和值：%s: %s, %s: %s%n", aq.head, aq.getHead(), aq.tail, aq.getTail());
+        System.out.printf("队列头尾索引和值：%s: %s, %s: %s%n",
+                aq.head,
+                aq.getHead(),
+                aq.tail,
+                aq.getTail());
         aq.printAll();
     }
 }

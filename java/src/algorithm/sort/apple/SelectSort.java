@@ -6,10 +6,12 @@ import java.util.Arrays;
  * 选择排序的Java实现<br>
  * 若有数组A[N]
  * <p>
- * 选择排序和插入排序有些类似，从第p个元素开始，每次从剩余的N-p元素中选出最小的那个元素，放在p个元素的末尾。<br>
+ * 选择排序和插入排序有些类似，从第p个元素开始，
+ * 每次从剩余的N-p元素中选出最小的那个元素，放在p个元素的末尾。<br>
  * 选择排序同样保证了前p个元素是已经排序的。
  * <p>
  * 若有数组【4，19，12，3，25，16】，选择排序的过程为：
+ * 
  * <pre>
  *      原数组     4 19 12 3 25 16
  *      第一次     3 19 12 4 25 16
@@ -49,7 +51,7 @@ public class SelectSort {
     }
 
     public static void main(String[] args) {
-        int[] a = new int[]{4, 19, 12, 3, 25, 16};
+        int[] a = new int[] { 4, 19, 12, 3, 25, 16 };
         SelectSort.sort(a);
         System.out.println(Arrays.toString(a));
     }
