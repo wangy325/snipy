@@ -1,12 +1,12 @@
-package oo.classandinterface;
+package oo;
 
 /**
  * Author: wangy325
  * Date: 2024-07-21 01:27:52
  * Description: 子类不能调用并未实现的构造器
- * */
+ */
 
-public class MainClass {
+public class InitSubClass {
 
     public static void main(String[] args) {
         Extended ext = new Extended();
@@ -19,8 +19,8 @@ public class MainClass {
 
 /***
  * Base no-arg constructor invoked~
-    class attr: Base attr
-    private attr: Base private attr
+ * class attr: Base attr
+ * private attr: Base private attr
  */
 
 class Base {
@@ -38,7 +38,9 @@ class Base {
     }
 
     private void bMethod() {
-        System.out.printf("class attr: %s\nprivate attr: %s\n", attr, private_attr);
+        System.out.printf("class attr: %s\nprivate attr: %s\n",
+                attr,
+                private_attr);
     }
 
     public void pubMethod() {
@@ -48,7 +50,5 @@ class Base {
 
 class Extended extends Base {
     // do nothing
-    // but still has a implicit constructor 
+    // but still has a implicit constructor
 }
-
-

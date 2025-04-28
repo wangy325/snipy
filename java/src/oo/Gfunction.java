@@ -1,4 +1,4 @@
-package oo.generic;
+package oo;
 
 /**
  * 函数式接口和Lambda表达式<br>

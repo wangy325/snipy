@@ -7,7 +7,8 @@ import java.util.AbstractList;
 
 
 /**
- * 这个类构建一个<b>不可修改</b>的"random access list"，构造器指定了list的size，但没有向list中添加任何元素
+ * 这个类构建一个<b>不可修改</b>的"random access list"，
+ * 构造器指定了list的size，但没有向list中添加任何元素
  * <p>
  * 那么元素是如何添加进去的呢，这是一个有趣的问题
  * <p>
@@ -83,5 +84,5 @@ public class CountingIntegerList extends AbstractList<Integer> {
     }
 }
 /* Output:
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+[0, 1, 2, 3, 4, 5,..., 25, 26, 27, 28, 29]
 *///:~

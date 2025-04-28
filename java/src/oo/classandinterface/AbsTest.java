@@ -36,3 +36,10 @@ class S extends F{
         System.out.println("S.f()");
     }
 }
+/*
+F constructor
+S constructor
+S.f()
+F.g()
+*/
+///:~

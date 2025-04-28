@@ -1,4 +1,4 @@
-package oo.reflect;
+package oo;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -14,13 +14,14 @@ import java.util.Scanner;
  * @version 1.0
  * @date 2020/4/28 / 16:04
  */
+@SuppressWarnings("rawtypes")
 public class ReflectionTest {
     public static void main(String[] args) {
         String name;
+        Scanner scanner = new Scanner(System.in);
         if (args.length > 0) {
             name = args[0];
         } else {
-            Scanner scanner = new Scanner(System.in);
             System.out.println("Enter Class name(e.g. java.util.ArrayList)");
             name = scanner.next();
         }
@@ -46,6 +47,7 @@ public class ReflectionTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        scanner.close();
         System.exit(0);
     }
 

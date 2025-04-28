@@ -1,4 +1,4 @@
-package common.string;
+package oo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,8 +13,7 @@ public class StringReg {
     static String pattern2 = "ab.cd.ef";
     static String pattern3 = "java.util.String";
     static String pattern4 = "ok";
-    static String pattern5 =
-        "/profile/upload/2020/09/15/9d6ca80b4030ec3589.png";
+    static String pattern5 = "/profile/upload/2020/09/15/03589.png";
 
     static String pattern6 = "hello@mary";
 
@@ -29,13 +28,15 @@ public class StringReg {
 
     /** 匹配并替换首字母 */
     static String replaceFirst(String reg) {
-//        return pattern1
-//          .replaceFirst(reg, String.valueOf(pattern1.charAt(0))
-//               .toUpperCase());
+        // return pattern1
+        // .replaceFirst(reg, String.valueOf(pattern1.charAt(0))
+        // .toUpperCase());
         return Pattern
-            .compile(reg)
-            .matcher(pattern1)
-            .replaceFirst(pattern1.substring(0, 1).toUpperCase());
+                .compile(reg)
+                .matcher(pattern1)
+                .replaceFirst(pattern1
+                        .substring(0, 1)
+                        .toUpperCase());
     }
 
     /** 获取文件的格式后缀 */
@@ -55,9 +56,10 @@ public class StringReg {
     }
 }
 
-///:~
-//true, true, false, false
-//Ab.cd
-//.png
-//mary
-//
+/*
+* true, true, false, false
+* Ab.cd
+* .png
+* mary
+*/
+/// :~

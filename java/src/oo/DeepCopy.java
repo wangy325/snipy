@@ -1,4 +1,4 @@
-package oo.classandinterface.clone;
+package oo;
 
 /**
  * 使用深拷贝，拷贝才有意义
@@ -7,16 +7,16 @@ package oo.classandinterface.clone;
  * @version 1.0
  * @date 2020/4/23 / 16:57
  */
-public class Item2 implements Cloneable {
+public class DeepCopy implements Cloneable {
     private String company;
     private Name name;
 
-    public Item2(String company, Name name) {
+    public DeepCopy(String company, Name name) {
         this.company = company;
         this.name = name;
     }
 
-    public Item2(String company, String first, String last) {
+    public DeepCopy(String company, String first, String last) {
         this.company = company;
         this.name = new Name(first, last);
     }
@@ -30,15 +30,16 @@ public class Item2 implements Cloneable {
     }
 
     /**
-     * it's necessary to implement <code>clone()</code> when you want to make a copy of an object
+     * it's necessary to implement <code>clone()</code>
+     * when you want to make a copy of an object
      *
      * @return the copy object
      * @throws CloneNotSupportedException
      */
     @Override
-    protected Item2 clone() throws CloneNotSupportedException {
+    protected DeepCopy clone() throws CloneNotSupportedException {
         // 深拷贝所有的可变引用都需要拷贝
-        Item2 clone = (Item2) super.clone();
+        DeepCopy clone = (DeepCopy) super.clone();
         clone.name = this.name.clone();
         return clone;
     }
@@ -46,9 +47,9 @@ public class Item2 implements Cloneable {
     @Override
     public String toString() {
         return "Item2{" +
-            "company='" + company + '\'' +
-            ", name=" + name +
-            '}';
+                "company='" + company + '\'' +
+                ", name=" + name +
+                '}';
     }
 
     private static class Name implements Cloneable {
@@ -67,9 +68,9 @@ public class Item2 implements Cloneable {
         @Override
         public String toString() {
             return "Name{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+                    "firstName='" + firstName + '\'' +
+                    ", lastName='" + lastName + '\'' +
+                    '}';
         }
 
         /**
@@ -86,9 +87,15 @@ public class Item2 implements Cloneable {
     }
 
     static class Test {
-        public static void main(String[] args) throws CloneNotSupportedException {
-            Item2 i = new Item2("app", "steve", "jobs");
-            Item2 copy = (Item2) i.clone();
+        public static void main(String[] args)
+                throws CloneNotSupportedException {
+
+            DeepCopy i = new DeepCopy(
+                    "app",
+                    "steve",
+                    "jobs");
+
+            DeepCopy copy = (DeepCopy) i.clone();
             // String 是（final）不可变的
             copy.changeCompany("apple");
             // 深拷贝时，拷贝对象改变和原对象相互独立
@@ -99,3 +106,9 @@ public class Item2 implements Cloneable {
         }
     }
 }
+
+/*
+ * Item2{company='app', name=Name{firstName='steve', lastName='jobs'}}
+ * Item2{company='apple', name=Name{firstName='stephen', lastName='jobs'}}
+ */
+/// :~
