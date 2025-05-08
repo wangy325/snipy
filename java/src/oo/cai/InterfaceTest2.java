@@ -1,4 +1,4 @@
-package oo.classandinterface;
+package oo.cai;
 
 /**
  * @author wangy
@@ -7,28 +7,32 @@ package oo.classandinterface;
  */
 public class InterfaceTest2 {
     public static void main(String[] args) {
-        W w =  new W();
+        W w = new W();
         w.pType();
     }
 }
 
-interface Vita{
-    default void pType(){
+interface Vita {
+    default void pType() {
         System.out.println("Vita 柠檬茶");
     }
 }
 
- abstract class Drink{
-    public void pType(){
+abstract class Drink {
+    public void pType() {
         System.out.println("Vita 奶");
     }
 }
 
-class W extends Drink implements Vita{
+class W extends Drink implements Vita {
     @Override
     public void pType() {
-//        super.pType();
+        super.pType();
         // 使用接口的默认方法
-        Vita.super.pType();
+        // Vita.super.pType();
     }
 }
+
+/*
+ * Vita 奶
+ */// :~

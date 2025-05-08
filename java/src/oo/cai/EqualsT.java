@@ -1,4 +1,4 @@
-package oo.classandinterface;
+package oo.cai;
 
 /**
  * @author wangy
@@ -8,14 +8,14 @@ package oo.classandinterface;
 public class EqualsT {
 
     public static void main(String[] args) {
-        Stu a = new Stu("ali",18, "190410");
-        StuM b = new StuM("ali",18, "190410","班长");
+        Stu a = new Stu("ali", 18, "190410");
+        StuM b = new StuM("ali", 18, "190410", "班长");
         System.out.println(a.equals(b));
         System.out.println(b.equals(a));
     }
 }
 
-class Stu{
+class Stu {
     protected String name;
     protected int age;
     protected String code;
@@ -28,19 +28,24 @@ class Stu{
 
     @Override
     public final boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        if (!(o instanceof Stu)) return false;
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (!(o instanceof Stu))
+            return false;
 
         Stu stu = (Stu) o;
 
-        if (age != stu.age) return false;
-        if (name != null ? !name.equals(stu.name) : stu.name != null) return false;
+        if (age != stu.age)
+            return false;
+        if (name != null ? !name.equals(stu.name) : stu.name != null)
+            return false;
         return code != null ? code.equals(stu.code) : stu.code == null;
     }
 }
 
-class StuM extends Stu{
+class StuM extends Stu {
     private String resp;
 
     public StuM(String name, int age, String code, String resp) {
@@ -52,5 +57,10 @@ class StuM extends Stu{
     }
 
     // 导出类无法覆盖equals()方法
-
 }
+
+/*
+ * output:
+ * true
+ * true
+ */// :~

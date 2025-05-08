@@ -1,4 +1,4 @@
-package oo.classandinterface;
+package oo.cai;
 
 /**
  * conflict between interface default method and abstract method
@@ -33,3 +33,9 @@ class C implements I1, I2 {
         I1.super.di();
     }
 }
+
+/*
+ * output
+ * calling C.di()
+ * I1.di()
+ */// :~

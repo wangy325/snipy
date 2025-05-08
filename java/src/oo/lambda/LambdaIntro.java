@@ -9,10 +9,10 @@ import java.util.Comparator;
  * @version 1.0
  * @date 2020/4/16 / 19:59
  */
-public class Intro {
+public class LambdaIntro {
 
     public static void main(String[] args) {
-        String[] s = new String[]{"baidu", "alibaba", "tencent", "baida", "kingdee"};
+        String[] s = new String[] { "baidu", "ali", "kingdee" };
 
         Arrays.sort(s, new Comparator<String>() {
             @Override
@@ -23,10 +23,8 @@ public class Intro {
         Arrays.sort(s, (s3, str) -> s3.compareToIgnoreCase(str));
         Arrays.sort(s, String::compareToIgnoreCase);
 
-
-        Arrays.sort(s, Intro::localCompare);
+        Arrays.sort(s, LambdaIntro::localCompare);
         System.out.println(Arrays.toString(s));
-
 
         ArrayList<String> s1 = new ArrayList<>();
         s1.add("mercury");
@@ -40,7 +38,8 @@ public class Intro {
     }
 
     private static int localCompare(String o1, String o2) {
-        if (o1.length() != o2.length()) return o1.length() - o2.length();
+        if (o1.length() != o2.length())
+            return o1.length() - o2.length();
         return o1.compareTo(o2);
     }
 
@@ -50,8 +49,9 @@ class StringLengthComparator implements Comparator<String> {
 
     @Override
     public int compare(String o1, String o2) {
-//        if (o1.length() != o2.length()) return o1.length() - o2.length();
-//        return o1.compareTo(o2);
+        // if (o1.length() != o2.length())
+        //     return o1.length() - o2.length();
+        // return o1.compareTo(o2);
         return o1.length() - o2.length();
     }
 }

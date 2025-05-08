@@ -1,5 +1,7 @@
 package oo.finalwords;
 
+import oo.references.Employee;
+
 /**
  * simple example of final parameters
  *
@@ -15,13 +17,10 @@ public class FinalParam {
     }
 
     static void swap(final Employee j, final Employee k) {
-        Employee temp = j;
-//         k = temp; // not allowed
-//         j = k; // not allowed
-    }
-
-    static void g(final int i) {
-        // i++; // not allowed
+        Employee tmp = j;
+        // check error, final var assign is not allowed
+        // k = temp;
+        // j = k;
     }
 
     public static void main(String[] args) {
@@ -31,24 +30,7 @@ public class FinalParam {
     }
 }
 
-class Employee {
-    private String name;
-    private int salary;
-
-    public Employee(String name, int salary) {
-        this.name = name;
-        this.salary = salary;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getSalary() {
-        return salary;
-    }
-
-    void raiseSalary(int multiple) {
-        this.salary = salary * multiple;
-    }
-}
+/* output:
+ * salary of e = 3000
+ * salary of x = 3000
+ */// :~

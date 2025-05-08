@@ -21,6 +21,7 @@ class Employee {
         nextId++;
     }
 
+    // getters
     public static int getNextId() {
         return nextId;
     }
@@ -48,9 +49,19 @@ public class TestStatic {
 
         for (Employee e : x) {
             e.setId();
-            System.out.println("id = " + e.getId()
-                + " name = " + e.getName() + " salary = " + e.getSalary());
+            System.out.println(
+                    "id = " + e.getId() +
+                            " name = " + e.getName() +
+                            " salary = " + e.getSalary());
         }
         System.out.println("the nextId is:  " + Employee.getNextId());
     }
 }
+
+/*
+ * output:
+ * id = 0 name = alex salary = 5000
+ * id = 1 name = bob salary = 6000
+ * id = 2 name = cup salary = 7000
+ * the nextId is: 3
+ */// :~

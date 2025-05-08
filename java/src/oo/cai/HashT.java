@@ -1,4 +1,4 @@
-package oo.classandinterface;
+package oo.cai;
 
 /**
  * @author wangy
@@ -15,3 +15,8 @@ public class HashT {
         System.out.println(t.hashCode() + " : " +tb.hashCode());
     }
 }
+
+/* output
+115 : 1956725890
+115 : 356573597
+*///:~

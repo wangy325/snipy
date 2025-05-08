@@ -8,19 +8,20 @@ package oo.innerclass;
  * @date 2020/4/19 / 13:49
  */
 
-
-/** interface used in other classes*/
+/** interface used in other classes */
 interface Dest {
     String showDest();
 }
 
 public class Flight3 {
     private final int C = 100;
+
     public Dest dest(String t) {
-        /**局部内部类*/
+        /** 局部内部类 */
         class PDest implements Dest {
             private String to;
             private int y;
+
             private PDest(String dest) {
                 this.to = dest;
                 // 使用.this访问外围类域
@@ -45,3 +46,7 @@ public class Flight3 {
     }
 }
 
+/*
+ * 100
+ * Macao
+ */// :~

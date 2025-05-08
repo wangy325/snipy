@@ -29,7 +29,8 @@ class AnonFlight {
 
             @Override
             public String showDest() {
-                // info = new AirInfo("JJ","JJ",1.0);   // not allowed!
+                // not allowed!
+                // info = new AirInfo("JJ","JJ",1.0);   
                 return to;
             }
         };

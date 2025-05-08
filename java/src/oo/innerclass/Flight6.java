@@ -16,10 +16,16 @@ public class Flight6 {
         Wrap wrap = p.wrap(3);
         System.out.println(wrap.value());
 
-        String[] strings = {"ali","google","amazon"};
+        String[] strings = { "ali", "google", "amazon" };
 
         // {{}} initialization
-        List<String> list = new ArrayList<String>(){{add("ali"); add("google"); add("amazon");}};
+        List<String> list = new ArrayList<String>() {
+            {
+                add("ali");
+                add("google");
+                add("amazon");
+            }
+        };
     }
 }
 
@@ -53,3 +59,9 @@ class Wrap {
         return i;
     }
 }
+
+/*
+ * base constructor
+ * extended initialized
+ * 9
+ */// :~

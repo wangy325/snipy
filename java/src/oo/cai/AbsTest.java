@@ -1,4 +1,4 @@
-package oo.classandinterface;
+package oo.cai;
 
 /**
  * @author wangy

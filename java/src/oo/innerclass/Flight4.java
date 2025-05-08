@@ -42,3 +42,9 @@ public class Flight4 {
         System.out.println(dest.showDest());
     }
 }
+
+/* 
+ * oo.innerclass.FlightShip$1InternalFlight@8bcc55f
+ * TaiPei
+ * TaiPei
+ */

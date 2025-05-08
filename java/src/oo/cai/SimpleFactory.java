@@ -1,4 +1,4 @@
-package oo.classandinterface;
+package oo.cai;
 
 /**
  * simple factory example
@@ -33,18 +33,25 @@ interface ServiceFactory {
 }
 
 class NameService implements Service {
-    NameService() {}
+    NameService() {
+    }
 
     @Override
-    public void service_a() {System.out.println("NameService.service_a()");}
+    public void service_a() {
+        System.out.println("NameService.service_a()");
+    }
 
     @Override
-    public void service_b() {System.out.println("NameService.service_b()");}
+    public void service_b() {
+        System.out.println("NameService.service_b()");
+    }
 }
 
 class NameServiceFactory implements ServiceFactory {
     @Override
-    public Service getService() {return new NameService();}
+    public Service getService() {
+        return new NameService();
+    }
 }
 
 class AgeService implements Service {
@@ -52,14 +59,27 @@ class AgeService implements Service {
     }
 
     @Override
-    public void service_a() {System.out.println("AgeService.service_a()");}
+    public void service_a() {
+        System.out.println("AgeService.service_a()");
+    }
 
     @Override
-    public void service_b() {System.out.println("AgeService.service_b()");}
+    public void service_b() {
+        System.out.println("AgeService.service_b()");
+    }
 }
 
 class AgeServiceFactory implements ServiceFactory {
 
     @Override
-    public Service getService() {return new AgeService();}
+    public Service getService() {
+        return new AgeService();
+    }
 }
+
+/*
+ * NameService.service_a()
+ * NameService.service_b()
+ * AgeService.service_a()
+ * AgeService.service_b()
+ */// :~

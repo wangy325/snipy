@@ -13,16 +13,15 @@ class ByValue {
     }
 
     public static void main(String[] args) {
-        Integer y = 10;
+        int y = 10;
+        // Integer y = Integer.valueOf(10);
         y = 3 * y;
         tripleValue(y);
         System.out.println("y = " + y);
-        Integer a = 17;
-        Integer b = 17;
-        Integer c = new Integer(17);
-        Integer d = new Integer(17);
-        System.out.println(a == b);
-        System.out.println(a == c);
-        System.out.println(c == d);
     }
 }
+
+/* output:
+ * x = 30
+ * y = 10
+ */// :~

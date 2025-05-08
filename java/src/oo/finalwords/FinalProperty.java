@@ -18,20 +18,19 @@ public class FinalProperty {
 
     final int[] a_array = new int[3];
 
-    static final String[] gender = new String[]{"male", "female"};
+    static final String[] gender = new String[] { "male", "female" };
 
     void test() throws Exception {
-        // illegal
-//        a--   // cannot modify final fields
+        // illegal, cannot modify final fields
+        // a--
+        // s= "c++";
 
-//        s= "c++"; // cannot modify
-        // use reflect can make that
-        Field value = String.class.getDeclaredField("value");
-        value.setAccessible(true);
-        char[] chars  = (char[]) value.get(s);
-        chars[0] = 'J';
-
-        System.out.println(s);
+        // use reflect can change final fields (before jdk 9)
+        // Field value = String.class.getDeclaredField("value");
+        // value.setAccessible(true);
+        // char[] chars = (char[]) value.get(s);
+        // chars[0] = 'J';
+        // System.out.println(s);
 
         // object content can be modified
         a_array[0] = 9;
@@ -42,11 +41,12 @@ public class FinalProperty {
 
         System.out.println(Arrays.toString(a_array));
 
-        String[] Gender = new String[]{"male", "female"};
-        // not allowed! cannot reference final property to a new reference!
+        String[] Gender = new String[] { "male", "female" };
+        // not allowed! cannot reference final
+        // property to a new reference!
         // gender = Gender;
         gender[0] = "MALE";
-
+        System.out.println(Arrays.toString(gender));
 
     }
 
@@ -54,3 +54,9 @@ public class FinalProperty {
         new FinalProperty().test();
     }
 }
+
+/*
+ * output:
+ * [2, 5, 9]
+ * [MALE, female]
+ *///:~
