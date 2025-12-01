@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Camera, Upload, ArrowLeft, Share2, Leaf, Search, ChevronRight, Award, AlertCircle, Bird, PawPrint, RefreshCw, ImageOff, X, ChevronLeft, ImageIcon, ZoomIn, SmileIcon, Binoculars } from 'lucide-react';
 
 // --- 全局配置 ---
-const apiKey = "AIzaSyC-EXVc1aDFlJpRfau83XYjb_kTy1_pWZ8"; // 运行时环境会自动注入 API Key
+const apiKey = ""; // 运行时环境会自动注入 API Key
 
 // --- 工具函数：文件转 Base64 ---
 const fileToBase64 = (file) => {
