@@ -1,0 +1,3 @@
+[submodule "pys/telebot"]
+	path = pys/telebot
+	url = git@github.com:wangy325/telebot_gemini.git
