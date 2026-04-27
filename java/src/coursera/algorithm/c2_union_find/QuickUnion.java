@@ -2,6 +2,8 @@ package coursera.algorithm.c2_union_find;
 
 import java.util.Arrays;
 
+import edu.princeton.cs.algs4.StdOut;
+
 /**
  * @author wangy
  * @version 1.0
@@ -15,8 +17,8 @@ public class QuickUnion {
         uf.union(3, 8);
         uf.union(6, 5);
         uf.print();
-        System.out.println(uf.find(4, 8));
-        System.out.println(uf.find(3, 9));
+        StdOut.println(uf.find(4, 8));
+        StdOut.println(uf.find(3, 9));
         uf.union(9, 4);
         uf.union(2, 1);
         uf.union(5, 0);
@@ -25,7 +27,7 @@ public class QuickUnion {
         uf.union(6, 1);
         uf.union(7, 3);
         uf.print();
-        System.out.println(uf.find(2,9));
+        StdOut.println(uf.find(2,9));
     }
 }
 
@@ -33,7 +35,7 @@ public class QuickUnion {
 class QuickUnionUF {
     private int[] id;
 
-    public QuickUnionUF(int N) {
+    QuickUnionUF(int N) {
         id = new int[N];
         for (int i = 0; i < N; i++) {
             id[i] = i;
@@ -42,7 +44,7 @@ class QuickUnionUF {
 
     // chase parent pointers until reach root
     // depth of i array access
-    public int root(int p) {
+    private int root(int p) {
         while (id[p] != p) {
             p = id[p];
         }
@@ -64,7 +66,7 @@ class QuickUnionUF {
     }
 
     public void print() {
-        System.out.println(Arrays.toString(id));
+        StdOut.println(Arrays.toString(id));
     }
 }
 

@@ -1,6 +1,7 @@
 package coursera.algorithm.c2_union_find;
 
 import java.util.Arrays;
+import edu.princeton.cs.algs4.*;
 
 /**
  * @author wangy
@@ -16,8 +17,8 @@ public class QuickFind {
         uf.union(3, 8);
         uf.union(6, 5);
         uf.print();
-        System.out.println(uf.find(4,8));
-        System.out.println(uf.find(3,9));
+        StdOut.println(uf.find(4,8));
+        StdOut.println(uf.find(3,9));
         uf.union(9,4);
         uf.union(2,1);
         uf.union(5,0);
@@ -62,7 +63,7 @@ class QuickFindUF {
     }
 
     public void print() {
-        System.out.println(Arrays.toString(id));
+        StdOut.println(Arrays.toString(id));
     }
 
 }

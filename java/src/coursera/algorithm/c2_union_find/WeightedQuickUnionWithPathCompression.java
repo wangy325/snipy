@@ -2,20 +2,22 @@ package coursera.algorithm.c2_union_find;
 
 import java.util.Arrays;
 
+import edu.princeton.cs.algs4.StdOut;
+
 /**
  * @author wangy
  * @version 1.0
  * @date 2023/5/25 / 08:50
  */
-public class QuickUnionWithPathCompression {
+public class WeightedQuickUnionWithPathCompression {
     public static void main(String[] args) {
         QUWithPathCompression uf = new QUWithPathCompression(10);
         uf.union(4, 3);
         uf.union(3, 8);
         uf.union(6, 5);
         uf.print();
-        System.out.println(uf.find(4, 8));
-        System.out.println(uf.find(3, 9));
+        StdOut.println(uf.find(4, 8));
+        StdOut.println(uf.find(3, 9));
         uf.union(9, 4);
         uf.union(2, 1);
         uf.union(5, 0);
@@ -24,9 +26,9 @@ public class QuickUnionWithPathCompression {
         uf.union(6, 1);
         uf.union(7, 3);
         uf.print();
-        System.out.println(uf.find(2,9));
+        StdOut.println(uf.find(2,9));
         // additional test: tree reorganized
-        System.out.println(uf.find(5, 7));
+        StdOut.println(uf.find(5, 7));
         uf.print();
     }
 }
@@ -84,6 +86,6 @@ class QUWithPathCompression {
     }
 
     public void print() {
-        System.out.println(Arrays.toString(id));
+        StdOut.println(Arrays.toString(id));
     }
 }
