@@ -5,13 +5,13 @@ package oo.references;
  * @version 1.0
  * @date 2020/4/14 / 14:14
  */
-class Employee {
+class EmployeeS {
     static int nextId = 0;
     private int id;
     private String name;
     private int salary;
 
-    public Employee(String name, int salary) {
+    public EmployeeS(String name, int salary) {
         this.name = name;
         this.salary = salary;
     }
@@ -42,19 +42,19 @@ class Employee {
 public class TestStatic {
 
     public static void main(String[] args) {
-        Employee[] x = new Employee[3];
-        x[0] = new Employee("alex", 5000);
-        x[1] = new Employee("bob", 6000);
-        x[2] = new Employee("cup", 7000);
+        EmployeeS[] x = new EmployeeS[3];
+        x[0] = new EmployeeS("alex", 5000);
+        x[1] = new EmployeeS("bob", 6000);
+        x[2] = new EmployeeS("cup", 7000);
 
-        for (Employee e : x) {
+        for (EmployeeS e : x) {
             e.setId();
             System.out.println(
                     "id = " + e.getId() +
                             " name = " + e.getName() +
                             " salary = " + e.getSalary());
         }
-        System.out.println("the nextId is:  " + Employee.getNextId());
+        System.out.println("the nextId is:  " + EmployeeS.getNextId());
     }
 }
 

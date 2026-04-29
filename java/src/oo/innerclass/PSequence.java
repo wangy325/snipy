@@ -1,7 +1,7 @@
 package oo.innerclass;
 
 
-interface Selector{
+interface SelectorP{
     boolean end();
     Object current();
     void next();
