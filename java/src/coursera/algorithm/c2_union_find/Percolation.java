@@ -18,7 +18,7 @@ public class Percolation {
             throw new IllegalArgumentException();
         this.size = n;
         // n^2 + 2 virtual sites
-        // assume the first and last site is VTop and vBottom sites
+        // assume the last 2 sites are VTop and vBottom
         // 0 ~ (n^2 - 1)
         grid = new WeightedQuickUnionUF(n * n + 2);
         vTop = n * n ;

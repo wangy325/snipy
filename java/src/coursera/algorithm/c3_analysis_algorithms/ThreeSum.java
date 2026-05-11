@@ -1,4 +1,4 @@
-package coursera.algorithm.c3AnalysisAlgorithms;
+package coursera.algorithm.c3_analysis_algorithms;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

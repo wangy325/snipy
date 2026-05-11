@@ -1,4 +1,4 @@
-package algorithm;
+package coursera.algorithm.c3_analysis_algorithms;
 
 
 /**
