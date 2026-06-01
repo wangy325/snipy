@@ -19,82 +19,16 @@ external-controller: '127.0.0.1:9090'
 # http://www.apple.com/library/test/success.html
 # http://www.msftconnecttest.com/connecttest.txt
 proxy-providers:
-  ChinaG-tw:
+  Ikuuu:
     type: http
-    path: ./proxyset/ChinaG.yaml
-    url: "*************"
+    path: ./proxyset/ikuuu-sub.yaml
+    url: ""
     interval: 1800
-    filter: 'TW'
     health-check:
       enable: true
       url: http://www.gstatic.com/generate_204
       interval: 300
-  ChinaG-hk:
-    type: file
-    path: ./proxyset/ChinaG.yaml
-    interval: 3600
-    filter: 'HK|SG'
-    health-check:
-      enable: true
-      url: http://www.gstatic.com/generate_204
-      interval: 300
-  ChinaG-jp:
-    type: file
-    path: ./proxyset/ChinaG.yaml
-    interval: 3600
-    filter: 'JP|VN'
-    health-check:
-      enable: true
-      url: http://www.gstatic.com/generate_204
-      interval: 300
-  ChinaG-free: # basically useless
-    type: file
-    path: ./proxyset/ChinaG.yaml
-    interval: 3600
-    filter: '^3.' # 可以用正则噢
-    health-check:
-      enable: true
-      url: http://www.gstatic.com/generate_204
-      interval: 300
-  Ikuuu-free:
-    type: http
-    path: ./proxyset/ikuuu-free.yaml
-    url: "https://l5vzf.no-mad-world.club/link/i1N3ZRHJxWsoAKPp?clash=3&extend=1"
-    interval: 3000
-    filter: '免费-日本'
-    health-check:
-      enable: true
-      url: http://www.gstatic.com/generate_204
-      interval: 300
-  Coffee-asia:
-    type: http
-    path: ./proxyset/coffee.yaml
-    # use encode origin subscribe url and then use 'https://limbopro.cyou/sub?target=clash&url=ENCODED_URL'
-    url: "*************"
-    interval: 3600
-    filter: 'TW|JP|SG'
-    health-check:
-      enable: true
-      url: http://www.gstatic.com/generate_204
-      interval: 300
-  Coffee-hk:
-    type: file
-    path: ./proxyset/coffee.yaml
-    interval: 3600
-    filter: 'HK'
-    health-check:
-      enable: true
-      url: http://www.gstatic.com/generate_204
-      interval: 300
-  Coffee-eu:
-    type: file
-    path: ./proxyset/coffee.yaml
-    interval: 3600
-    filter: "US|DE|KR|AR|UK|AT|IE"
-    health-check:
-      enable: true
-      url: http://www.gstatic.com/generate_204
-      interval: 300
+  
 proxy-groups:
   - name: 🎯境外流量
     type: select  
@@ -102,85 +36,98 @@ proxy-groups:
     interval: 300
     proxies:
       - DIRECT
-      - 🐤️台妹爱我
-      - 🐥️自由亚洲
-      - 🥤亚洲咖啡
-      - 🇭🇰香港浓调 
+      - 🇨🇳自由亚洲
+      - 🇭🇰你知唔知
+      - ⬇️下载专用
       - ♻️故障切换
-      - 🆓️免费备用
-  - name: 🐤️台妹爱我
-    type: url-test
+
+  - name: 🇨🇳自由亚洲
+    type: select
     url: http://www.gstatic.com/generate_204
     interval: 300
     use: 
-      - ChinaG-tw
-  - name: 🐥️自由亚洲
+      - Ikuuu
+    filter: "日本A|台湾|新加坡|韩国"
+
+  - name: 🇭🇰你知唔知
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     use:
-      - ChinaG-hk
-      - ChinaG-jp
-  - name: 🥤亚洲咖啡
-    type: url-test # 自动测速并选择节点
+      - Ikuuu
+    filter: "香港"
+
+  - name: ⬇️下载专用
+    type: select
     url: http://www.gstatic.com/generate_204
     interval: 300
     use:
-      - Coffee-asia
-  - name: 🇭🇰香港浓调
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    use:
-      - Coffee-hk
+      - Ikuuu
+    filter: "下载专用"
+
   - name: ♻️故障切换
+    type: select
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    use:
+      - Ikuuu
+    filter: "US|DE|KR|AR|UK|AT|美国|加拿大|印度|法国|德国|土耳其|英国|俄罗斯|乌克兰|阿根廷|澳大利亚"
+    proxies:
+      - 🆓️免费备用
+  - name: 🆓️免费备用
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     use:
-      - Coffee-eu
-    # proxies:
-    #   - 🆓️免费备用
-  - name: 🆓️免费备用
-    type: select
-    # url: http://www.gstatic.com/generate_204
-    # interval: 300
-    use:
-      # - ChinaG-free
-      - Ikuuu-free
-  - name: 🎬️Youtube
-    type: select
-    proxies: 
-      - 🎯境外流量
-  - name: 🤖️OpenAI
+      - Ikuuu
+    filter: "免费"
+
+  - name: 🤖OpenAI
     type: select
     proxies:
-      - 🐤️台妹爱我
-      - 🥤亚洲咖啡
-      - 🇭🇰香港浓调
+      - 🎯境外流量
+      - 🇨🇳自由亚洲
       - ♻️故障切换
   - name: 🎵Spotify
     type: select
+    use:
+      - Ikuuu
+    filter: "台湾|TW"
     proxies:
       - DIRECT
-      - 🐤️台妹爱我
-      - 🥤亚洲咖啡
-  - name: 🍎️Apple
+      - 🎯境外流量
+  - name: 🔍Google
+    type: select
+    use:
+      - Ikuuu
+    filter: "美国|新加坡|台湾"
+    proxies:
+      - 🎯境外流量
+      
+  - name: 🕊Gemini
+    type: select
+    use:
+      - Ikuuu
+    filter: "美国|加拿大"
+    proxies:
+      - 🎯境外流量
+      - 🇨🇳自由亚洲
+
+  - name: 🎬Youtube
+    type: select
+    proxies: 
+      - 🎯境外流量
+  - name: 📺Netflix
+    type: select
+    proxies: 
+      - 🎯境外流量
+      - 🇭🇰你知唔知
+      - 🇺🇸为人民服务
+
+  - name: 🍎Apple
     type: select
     proxies: 
       - DIRECT
-      - 🎯境外流量
-  - name: 📺️Netflix
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    proxies:
-      - 🎯境外流量
-  - name: 💃🏻️TikTok
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    proxies:
       - 🎯境外流量
   - name: ⚠️广告拦截
     type: select
@@ -196,6 +143,12 @@ proxy-groups:
       - 🎯境外流量
 
 rule-providers:
+  google:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt"
+    path: ./ruleset/google.yaml
+    interval: 86400
   GoogleCN:
     behavior: classical
     type: http
@@ -208,12 +161,6 @@ rule-providers:
     url: https://gitlab.com/lodepuly/vpn_tool/-/raw/master/Tool/Clash/Rule/ChinaDownloadCDN.yaml
     interval: 86400
     path: ./ruleset/GameChinaDownload_CDN.yaml
-  # GameDownloadCDN_International:
-  #   behavior: classical
-  #   type: http
-  #   url: https://gitlab.com/lodepuly/vpn_tool/-/raw/master/Tool/Clash/Rule/InternationalDownloadCDN.yaml
-  #   interval: 86400
-  #   path: ./ruleset/GameChinaDownloadCDN_International.yaml
   YouTube:
     behavior: classical
     type: http
@@ -310,12 +257,6 @@ rule-providers:
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/apple.txt"
     path: ./ruleset/apple.yaml
     interval: 86400
-  google:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt"
-    path: ./ruleset/google.yaml
-    interval: 86400
   telegramcidr:
     type: http
     behavior: ipcidr
@@ -324,56 +265,37 @@ rule-providers:
     interval: 86400
 
 rules:
-  # 自定义规则
-  - DOMAIN-SUFFIX,bing.com,🥤亚洲咖啡
-  
-  - RULE-SET,GoogleCN,🎯境外流量
-  - RULE-SET,YouTube,🎬️Youtube
-  - RULE-SET,GameDownloadCDN_CN,DIRECT
-  # - RULE-SET,GameDownloadCDN_International,♻️故障切换
-  - RULE-SET,Netflix,📺️Netflix
-  - RULE-SET,DisneyPlus,📺️Netflix
-  - RULE-SET,ProxyGFWlist,🎯境外流量
-  - RULE-SET,ProxyLite,🎯境外流量
-  - RULE-SET,OpenAi,🤖️OpenAI
-  - RULE-SET,tld-not-cn,🎯境外流量
   - RULE-SET,cncidr,DIRECT
   - RULE-SET,lancidr,DIRECT
   - RULE-SET,applications,DIRECT
   - RULE-SET,private,DIRECT
   - RULE-SET,reject,REJECT
-  - RULE-SET,icloud,🍎️Apple
-  - RULE-SET,apple,🍎️Apple
-  - RULE-SET,google,🎯境外流量
+  # for Gemini  ======
+  - DOMAIN-KEYWORD,gemini,🕊Gemini
+  - DOMAIN-SUFFIX,bard.google.com,🕊Gemini
+  - DOMAIN-SUFFIX,generativelanguage.googleapis.com,🕊Gemini
+  - DOMAIN-SUFFIX,ai.google.dev,🕊Gemini
+  - DOMAIN-SUFFIX,makersuite.google.com,🕊Gemini
+  # ==================
+
+  # 自定义规则
+  - DOMAIN-SUFFIX,bing.com,🎯境外流量
+  - DOMAIN-SUFFIX,cn.bing.com,🎯境外流量
+  - DOMAIN-KEYWORD,google,🔍Google
+  - DOMAIN-SUFFIX,google.com,🔍Google
+  - RULE-SET,GoogleCN,🔍Google
+  - RULE-SET,google,🔍Google
+  - RULE-SET,OpenAi,🤖OpenAI
   - RULE-SET,telegramcidr,🎯境外流量
+  - RULE-SET,ProxyGFWlist,🎯境外流量
+  - RULE-SET,ProxyLite,🎯境外流量
+  - RULE-SET,icloud,🍎Apple
+  - RULE-SET,apple,🍎Apple
+  - RULE-SET,YouTube,🎬Youtube
+  - RULE-SET,Netflix,📺Netflix
+  - RULE-SET,DisneyPlus,📺Netflix
+  - RULE-SET,tld-not-cn,🎯境外流量
   ## other addtional rules
-  - DOMAIN,lf16-effectcdn.byteeffecttos-g.com,💃🏻️TikTok
-  - DOMAIN,lf16-pkgcdn.pitaya-clientai.com,💃🏻️TikTok
-  - DOMAIN,p16-tiktokcdn-com.akamaized.net,💃🏻️TikTok
-  - DOMAIN-SUFFIX,bytedapm.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,bytegecko-i18n.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,byteoversea.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,capcut.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,ibytedtos.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,ibyteimg.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,ipstatp.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,isnssdk.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,muscdn.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,musical.ly,💃🏻️TikTok
-  - DOMAIN-SUFFIX,sgpstatp.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,snssdk.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,tik-tokapi.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,tiktok.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,tiktokcdn-us.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,tiktokcdn.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,tiktokd.net,💃🏻️TikTok
-  - DOMAIN-SUFFIX,tiktokd.org,💃🏻️TikTok
-  - DOMAIN-SUFFIX,tiktokmusic.app,💃🏻️TikTok
-  - DOMAIN-SUFFIX,tiktokv.com,💃🏻️TikTok
-  - DOMAIN-SUFFIX,tiktokv.us,💃🏻️TikTok
-  - DOMAIN-KEYWORD,musical.ly,💃🏻️TikTok
-  - DOMAIN-KEYWORD,tiktok,💃🏻️TikTok
-  - PROCESS-NAME,com.zhiliaoapp.musically,💃🏻️TikTok
   - DOMAIN,audio4-ak-spotify-com.akamaized.net,🎵Spotify
   - DOMAIN,cdn-spotify-experiments.conductrics.com,🎵Spotify
   - DOMAIN,heads-ak-spotify-com.akamaized.net,🎵Spotify
